@@ -4,6 +4,7 @@
 
 import Relationship from "./Relationship";
 import Node from "./Node";
+import Link from "./Link";
 
 export default class Graph {
   relationships: Relationship[];
@@ -31,4 +32,22 @@ export default class Graph {
       .map((relationship) => relationship.getNodes())
       .reduce((acc, val) => acc.concat(val), []);
   }
+
+  getLinkList(): Link[] {
+    return this.relationships.map((relationship) => relationship.link);
+  }
+
+  getNodeConnections(): NodeConnection[] {
+    return this.relationships.map((relationship) => {
+      return {
+        source: relationship.node1,
+        target: relationship.node2,
+      };
+    });
+  }
+}
+
+export interface NodeConnection {
+  source: Node;
+  target: Node;
 }

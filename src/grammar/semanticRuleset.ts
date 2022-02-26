@@ -17,8 +17,8 @@ import Link, {
   LinkDirection,
   getLinkStrengthTypeByOperator,
 } from "../graph/Link.js";
-import Node, { NodeType } from "../graph/Node.js";
-import Relationship from "../graph/Relationship.js";
+import Node, { NodeType } from "../graph/Node";
+import Relationship from "../graph/Relationship";
 
 const _makeLinkContext = (
   semanticContexts: SemanticContext[],

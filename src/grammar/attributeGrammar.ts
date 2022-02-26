@@ -1,6 +1,6 @@
-import lexicalRuleset from "./lexicalRuleset.js";
-import semanticRuleset from "./semanticRuleset.js";
-import syntaxRuleset from "./syntaxRuleset.js";
+import lexicalRuleset from "./lexicalRuleset";
+import semanticRuleset from "./semanticRuleset";
+import syntaxRuleset from "./syntaxRuleset";
 
 const attributeGrammar = {
   lexicalRuleset,
