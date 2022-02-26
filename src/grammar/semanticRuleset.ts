@@ -9,16 +9,16 @@ import {
   Attribute,
   SemanticContext,
 } from "tiny-comp";
-import Graph from "../graph/Graph";
+import Graph from "../graph/Graph.js";
 
 import Link, {
   LinkStrength,
   LinkOptions,
   LinkDirection,
   getLinkStrengthTypeByOperator,
-} from "../graph/Link";
-import Node, { NodeType } from "../graph/Node";
-import Relationship from "../graph/Relationship";
+} from "../graph/Link.js";
+import Node, { NodeType } from "../graph/Node.js";
+import Relationship from "../graph/Relationship.js";
 
 const _makeLinkContext = (
   semanticContexts: SemanticContext[],

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Interactive graph with particle flow",
   "main": "build/index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon build/index.js",
@@ -12,6 +13,12 @@
   "author": "Alexander Weichart",
   "license": "MIT",
   "dependencies": {
+    "@types/d3": "^7.1.0",
+    "@types/express": "^4.17.13",
+    "@types/jsdom": "^16.2.14",
+    "d3": "^7.3.0",
+    "express": "^4.17.3",
+    "jsdom": "^19.0.0",
     "tiny-comp": "^1.2.7"
   },
   "devDependencies": {

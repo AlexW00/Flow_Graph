@@ -18,4 +18,8 @@ export default class Relationship {
     this.node1 = node1;
     this.node2 = node2;
   }
+
+  getNodes(): Node[] {
+    return [this.node1, this.node2];
+  }
 }

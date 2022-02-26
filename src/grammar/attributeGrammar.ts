@@ -1,7 +1,6 @@
-import { AttributeGrammar } from "tiny-comp";
-import lexicalRuleset from "./lexicalRuleset";
-import semanticRuleset from "./semanticRuleset";
-import syntaxRuleset from "./syntaxRuleset";
+import lexicalRuleset from "./lexicalRuleset.js";
+import semanticRuleset from "./semanticRuleset.js";
+import syntaxRuleset from "./syntaxRuleset.js";
 
 const attributeGrammar = {
   lexicalRuleset,

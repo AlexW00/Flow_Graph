@@ -3,6 +3,7 @@
 // ====================================================== //
 
 import Relationship from "./Relationship";
+import Node from "./Node";
 
 export default class Graph {
   relationships: Relationship[];
@@ -23,5 +24,11 @@ export default class Graph {
 
   getRelationshipById(id: string) {
     return this.relationships.find((relationship) => relationship.id() === id);
+  }
+
+  getNodeList(): Node[] {
+    return this.relationships
+      .map((relationship) => relationship.getNodes())
+      .reduce((acc, val) => acc.concat(val), []);
   }
 }
