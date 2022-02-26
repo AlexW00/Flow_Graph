@@ -37,7 +37,6 @@ const _makeLinkContext = (
 
   semanticContext.addAttribute(
     new Attribute("val", _deps, (...deps) => {
-      console.log(deps);
       return new Link(
         linkDirection,
         deps[0] ? deps[0].value() : new LinkOptions()
