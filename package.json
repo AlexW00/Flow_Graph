@@ -12,7 +12,7 @@
   "author": "Alexander Weichart",
   "license": "MIT",
   "dependencies": {
-    "tiny-comp": "^1.2.5"
+    "tiny-comp": "^1.2.7"
   },
   "devDependencies": {
     "@types/node": "^17.0.21",

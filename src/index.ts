@@ -6,7 +6,7 @@ const compilerOptions: TinyCompOptions = {
   ignoreTokensNamed: ["whitespace"],
 };
 
-const inputString = `"hello"-(+10,2)->"world"`;
+const inputString = `"hello"-(+10,2)->[[yooo]] "hello"-(+10,2)->[[yooo]]`;
 
 const compiler = new TinyComp(attributeGrammar, compilerOptions);
 const compileResult = compiler.compile(inputString);
