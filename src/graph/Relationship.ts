@@ -4,22 +4,30 @@
 
 import Node from "./Node";
 import Link from "./Link";
+import { NodeConnection } from "./Graph";
 
-export default class Relationship {
+export default class Relationship implements NodeConnection {
   link: Link;
-  node1: Node;
-  node2: Node;
+  source: Node;
+  target: Node;
   id(): string {
-    return this.node1.name + "-" + this.node2.name;
+    return this.source.name + "-" + this.target.name;
   }
 
   constructor(link: Link, node1: Node, node2: Node) {
     this.link = link;
-    this.node1 = node1;
-    this.node2 = node2;
+    this.source = node1;
+    this.target = node2;
   }
 
   getNodes(): Node[] {
-    return [this.node1, this.node2];
+    return [this.source, this.target];
+  }
+
+  getNodeConnection(): NodeConnection {
+    return {
+      source: this.source,
+      target: this.target,
+    };
   }
 }

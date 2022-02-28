@@ -2,21 +2,10 @@
 // ======================== Node ======================== //
 // ====================================================== //
 
-import { SimulationNodeDatum } from "d3";
-
-export default class Node implements SimulationNodeDatum {
+export default class Node {
   // ~~~~~~~~~~~~~~~~~ Node ~~~~~~~~~~~~~~~~ //
   name: string;
   nodeType: NodeType;
-
-  // ~~~~~~~~~ SimulationNodeDatum ~~~~~~~~~ //
-  index?: number;
-  x?: number;
-  y?: number;
-  vx?: number;
-  vy?: number;
-  fx?: number;
-  fy?: number;
 
   constructor(name: string, nodeType: NodeType) {
     this.name = name;

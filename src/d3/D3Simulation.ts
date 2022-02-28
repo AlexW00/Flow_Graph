@@ -2,6 +2,7 @@ import D3Tickable from "./D3Tickable";
 
 class D3Simulation {
   static simulation: d3.Simulation<d3.SimulationNodeDatum, undefined>;
+  static TICK_EVENT = "d3_tick";
 
   static create(
     d3: any,

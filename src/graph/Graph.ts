@@ -40,8 +40,8 @@ export default class Graph {
   getNodeConnections(): NodeConnection[] {
     return this.relationships.map((relationship) => {
       return {
-        source: relationship.node1,
-        target: relationship.node2,
+        source: relationship.source,
+        target: relationship.target,
       };
     });
   }

@@ -9,7 +9,7 @@ const compilerOptions: TinyCompOptions = {
   ignoreTokensNamed: ["whitespace"],
 };
 
-const inputString = `"Hello"-->[[World]]`;
+const inputString = `"Hello"-->[[World]]"Hello2"-->[[World2]]`;
 const compiler = new TinyComp(attributeGrammar, compilerOptions);
 
 const graph = compiler.compile(inputString) as Graph;
