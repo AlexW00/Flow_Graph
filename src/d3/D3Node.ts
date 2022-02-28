@@ -31,7 +31,7 @@ export default class D3Node
     $svg: d3.Selection<SVGGElement, D3Relationship, SVGGElement, unknown>
   ) {
     super(node.name, node.nodeType);
-    this.$selection = this._appendToSvg($svg);
+    this.$selection = this._append($svg);
 
     this.d3_Circle = new D3Circle(this.$selection);
     this.d3_Label = new D3Label(this.$selection);
@@ -40,7 +40,7 @@ export default class D3Node
     D3DragHandler.applyDragHandler(this.$selection as any);
   }
 
-  _appendToSvg = (
+  _append = (
     $svg: d3.Selection<SVGGElement, D3Relationship, SVGGElement, unknown>
   ) => {
     return $svg

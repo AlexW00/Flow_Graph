@@ -32,6 +32,17 @@ export class Observable {
     this.listener[type].push(callback);
   }
 
+  removeEventListener(type: string, callback: Function) {
+    if (this.listener[type] !== undefined) {
+      for (let i = 0; i < this.listener[type].length; i++) {
+        if (this.listener[type][i] === callback) {
+          this.listener[type].splice(i, 1);
+          return;
+        }
+      }
+    }
+  }
+
   notifyAll(event: Event) {
     if (this.listener[event.type] !== undefined) {
       for (let i = 0; i < this.listener[event.type].length; i++) {

@@ -33,7 +33,7 @@ export default class D3Graph extends Graph implements D3Appendable {
     this.d3Simulation = D3Simulation.create(d3, this);
     this.d3DragHandler = D3DragHandler.create(d3, this.d3Simulation);
 
-    this.$selection = this._appendToSvg(this.$svg);
+    this.$selection = this._append(this.$svg);
 
     this.d3Relationships = this.relationships.map(
       (relationship: Relationship) => {
@@ -47,12 +47,13 @@ export default class D3Graph extends Graph implements D3Appendable {
       },
       []
     );
+
     D3Simulation.simulation.nodes(_nodes).on("tick", () => {
       EventBus.notifyAll(new Event(D3Simulation.TICK_EVENT, {}));
     });
   }
 
-  _appendToSvg($svg: d3.Selection<SVGElement, unknown, null, undefined>) {
+  _append($svg: d3.Selection<SVGElement, unknown, null, undefined>) {
     return $svg.append("g").attr("class", "graph");
   }
 }

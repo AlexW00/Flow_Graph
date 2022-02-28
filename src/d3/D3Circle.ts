@@ -6,10 +6,10 @@ export default class D3Circle implements D3Appendable {
   $selection: d3.Selection<SVGCircleElement, D3Node, SVGGElement, unknown>;
 
   constructor($svg: d3.Selection<SVGGElement, D3Node, any, unknown>) {
-    this.$selection = this._appendToSvg($svg);
+    this.$selection = this._append($svg);
   }
 
-  _appendToSvg($svg: d3.Selection<SVGGElement, D3Node, SVGGElement, unknown>) {
+  _append($svg: d3.Selection<SVGGElement, D3Node, SVGGElement, unknown>) {
     return $svg
       .append("circle")
       .attr("r", 75)
