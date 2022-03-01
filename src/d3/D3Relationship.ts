@@ -26,7 +26,7 @@ export default class D3Relationship
 
     this.$selection = this._append($svg);
     this.d3Source = new D3Node(this.source, this.$selection);
-    this.d3Source.addEventListener(D3Node.CLICKED_EVENT, () =>
+    this.d3Source.addEventListener(D3Node.EMIT_PARTICLE_EVENT, () =>
       this._emitParticle()
     );
     this.d3Target = new D3Node(this.target, this.$selection);

@@ -9,6 +9,7 @@ import { Event, EventBus } from "../utils/Observable";
 import D3Simulation from "./D3Simulation";
 import D3DragHandler from "./D3DragHandler";
 import { LinkStrength, performOperation } from "../graph/Link";
+import D3_CONFIG from "./D3_CONFIG";
 
 export default class D3Node
   extends Node
@@ -28,7 +29,7 @@ export default class D3Node
   vy?: number;
   fx?: number;
   fy?: number;
-  static CLICKED_EVENT: string = "nodeClicked";
+  static EMIT_PARTICLE_EVENT: string = "emitParticle";
 
   constructor(
     node: Node,
@@ -48,7 +49,7 @@ export default class D3Node
     D3Node.d3Nodes.push(this);
 
     this.$selection.on("click", () =>
-      this.notifyAll(new Event(D3Node.CLICKED_EVENT, this))
+      this.notifyAll(new Event(D3Node.EMIT_PARTICLE_EVENT, this))
     );
   }
 
@@ -59,6 +60,7 @@ export default class D3Node
       linkStrength.type
     );
     this.d3_Circle.updateRadius(this.weight);
+    this.notifyAll(new Event(D3Node.EMIT_PARTICLE_EVENT, this));
   }
 
   _append = (
@@ -78,7 +80,13 @@ export default class D3Node
   }
 
   onTicked = (): void => {
-    this.$selection.attr("transform", function (d: any) {
+    const width = D3_CONFIG.svg.width,
+      height = D3_CONFIG.svg.height,
+      radius = this.d3_Circle.radius;
+    // keep in bounds
+    this.$selection.attr("transform", function (d) {
+      d.x = Math.max(radius, Math.min(width - radius, d.x));
+      d.y = Math.max(radius, Math.min(height - radius, d.y));
       return "translate(" + d.x + "," + d.y + ")";
     });
   };

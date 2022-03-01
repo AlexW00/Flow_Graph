@@ -20,7 +20,7 @@ class D3Simulation {
           .distance(250)
       )
       .force("charge", d3.forceManyBody())
-      .force("center", d3.forceCenter(context.width / 2, context.height / 2))
+      //.force("center", d3.forceCenter(context.width / 2, context.height / 2))
       .force("collisionForce", d3.forceCollide(75));
     return D3Simulation.simulation;
   }
