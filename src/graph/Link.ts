@@ -66,6 +66,25 @@ export function getLinkStrengthTypeByOperator(
   }
 }
 
+export function performOperation(
+  operand1: number,
+  operand2: number,
+  linkStrengthType: LinkStrengthType
+) {
+  switch (linkStrengthType) {
+    case LinkStrengthType.PLUS:
+      return operand1 + operand2;
+    case LinkStrengthType.MINUS:
+      return operand1 - operand2;
+    case LinkStrengthType.MULTIPLY:
+      return operand1 * operand2;
+    case LinkStrengthType.DIVIDE:
+      return operand1 / operand2;
+    default:
+      return operand1 + operand2;
+  }
+}
+
 // ~~~~~~~~~~~~ LinkDirection ~~~~~~~~~~~~ //
 
 export enum LinkDirection {
@@ -74,10 +93,8 @@ export enum LinkDirection {
   LEFT_RIGHT = "LEFT_RIGHT",
 }
 
-// ~~~~~~~~~~~~~~~ Default ~~~~~~~~~~~~~~~ //
-
-const LINK_DEFAULT_VALUES = {
-  strength: 1,
+export let LINK_DEFAULT_VALUES = {
+  strength: 5,
   strengthType: LinkStrengthType.PLUS,
   speed: 1,
 };

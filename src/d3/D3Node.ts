@@ -8,6 +8,7 @@ import D3Tickable from "./D3Tickable";
 import { EventBus } from "../utils/Observable";
 import D3Simulation from "./D3Simulation";
 import D3DragHandler from "./D3DragHandler";
+import { LinkStrength, performOperation } from "../graph/Link";
 
 export default class D3Node
   extends Node
@@ -40,8 +41,12 @@ export default class D3Node
     D3DragHandler.applyDragHandler(this.$selection as any);
   }
 
-  updateWeight(weight: number) {
-    this.weight = weight;
+  updateWeight(linkStrength: LinkStrength) {
+    this.weight = performOperation(
+      this.weight,
+      linkStrength.strength,
+      linkStrength.type
+    );
     this.d3_Circle.updateRadius(this.weight);
   }
 
