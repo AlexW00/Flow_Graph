@@ -5,7 +5,7 @@ import D3Circle from "./D3Circle";
 import D3Label from "./D3Label";
 import D3Relationship from "./D3Relationship";
 import D3Tickable from "./D3Tickable";
-import { EventBus } from "../utils/Observable";
+import { Event, EventBus } from "../utils/Observable";
 import D3Simulation from "./D3Simulation";
 import D3DragHandler from "./D3DragHandler";
 import { LinkStrength, performOperation } from "../graph/Link";
@@ -14,9 +14,11 @@ export default class D3Node
   extends Node
   implements D3Appendable, SimulationNodeDatum, D3Tickable
 {
-  $selection: d3.Selection<SVGGElement, D3Node, any, unknown>;
-  d3_Circle: D3Circle;
-  d3_Label: D3Label;
+  static d3Nodes: D3Node[] = [];
+
+  $selection!: d3.Selection<SVGGElement, D3Node, any, unknown>;
+  d3_Circle!: D3Circle;
+  d3_Label!: D3Label;
 
   // ~~~~~~~~~ SimulationNodeDatum ~~~~~~~~~ //
   index?: number;
@@ -26,11 +28,14 @@ export default class D3Node
   vy?: number;
   fx?: number;
   fy?: number;
+  static CLICKED_EVENT: string = "nodeClicked";
 
   constructor(
     node: Node,
     $svg: d3.Selection<SVGGElement, D3Relationship, SVGGElement, unknown>
   ) {
+    const existingNode = D3Node.findNodeById(node.id());
+    if (existingNode) return existingNode;
     super(node.name, node.nodeType);
     this.$selection = this._append($svg);
 
@@ -39,6 +44,12 @@ export default class D3Node
 
     EventBus.addEventListener(D3Simulation.TICK_EVENT, this.onTicked);
     D3DragHandler.applyDragHandler(this.$selection as any);
+
+    D3Node.d3Nodes.push(this);
+
+    this.$selection.on("click", () =>
+      this.notifyAll(new Event(D3Node.CLICKED_EVENT, this))
+    );
   }
 
   updateWeight(linkStrength: LinkStrength) {
@@ -61,6 +72,10 @@ export default class D3Node
       .enter()
       .append("g");
   };
+
+  static findNodeById(id: string): D3Node | undefined {
+    return D3Node.d3Nodes.find((d3Node) => d3Node.id() === id);
+  }
 
   onTicked = (): void => {
     this.$selection.attr("transform", function (d: any) {

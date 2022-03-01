@@ -10,6 +10,11 @@ export interface Vector {
   y: number;
 }
 
+export interface VectorPair {
+  source: Vector;
+  target: Vector;
+}
+
 export function makeCircleFromD3Node(d3Node: D3Node): Circle {
   return {
     position: { x: d3Node.x!!, y: d3Node.y!! },

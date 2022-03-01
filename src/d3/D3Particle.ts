@@ -1,13 +1,8 @@
 import { Selection, SimulationNodeDatum } from "d3";
-import {
-  calcClosestPointsOfCircles,
-  calcJointVector,
-  makeCircleFromD3Node,
-  Vector,
-} from "../utils/LinearAlgebra";
+import { calcJointVector } from "../utils/LinearAlgebra";
 import { Event, EventBus, Observable } from "../utils/Observable";
 import D3Appendable from "./D3Appendable";
-import D3Node from "./D3Node";
+import D3Link from "./D3Link";
 import D3Relationship from "./D3Relationship";
 import D3Simulation from "./D3Simulation";
 import D3_CONFIG from "./D3_CONFIG";
@@ -32,8 +27,6 @@ export default class D3Particle
   travelTime: number; // how long this particle will be alive
 
   travelVector!: { x: number; y: number };
-  sourceClosestPoint!: Vector; // closest point on from the source node to the target node
-  targetClosestPoint!: Vector; // closest point from the target node to the source node
 
   // ~~~~~~~~~ SimulationNodeDatum ~~~~~~~~~ //
   index?: number;
@@ -49,7 +42,7 @@ export default class D3Particle
     this.d3Relationship = d3Relationship;
     this.id = d3Relationship.id() + "-" + this.creationTime;
     this.travelTime = this._calcTravelTime();
-    this._setInitialPosition();
+    this._setInitialPosition(d3Relationship.d3Link);
 
     this.$selection = this._append(d3Relationship.$selection);
 
@@ -76,11 +69,7 @@ export default class D3Particle
     const progress = this._calcProgress();
     if (progress >= 1) this._destroy();
 
-    const newPos = this._calcPosition(
-      progress,
-      this.d3Relationship.d3Target,
-      this.d3Relationship.d3Source
-    );
+    const newPos = this._calcPosition(progress, this.d3Relationship.d3Link);
     this._updatePosition(newPos.x, newPos.y);
   };
 
@@ -91,14 +80,9 @@ export default class D3Particle
     );
   }
 
-  _setInitialPosition() {
-    const pos = this._calcPosition(
-      0,
-      this.d3Relationship.d3Target,
-      this.d3Relationship.d3Source
-    );
-    this.x = pos.x;
-    this.y = pos.y;
+  _setInitialPosition(d3Link: D3Link) {
+    this.x = d3Link.path.source.x;
+    this.y = d3Link.path.source.y;
   }
 
   _calcProgress(): number {
@@ -117,22 +101,16 @@ export default class D3Particle
       .attr("cy", this.y);
   }
 
-  _calcPosition(progress: number, d3Target: D3Node, d3Source: D3Node) {
-    this.travelVector = this._calcTravelVector(d3Target, d3Source);
+  _calcPosition(progress: number, d3Link: D3Link) {
+    this.travelVector = this._calcTravelVector(d3Link);
     return {
-      x: this.sourceClosestPoint.x + this.travelVector.x!! * progress,
-      y: this.sourceClosestPoint.y + this.travelVector.y!! * progress,
+      x: d3Link.path.source.x + this.travelVector.x!! * progress,
+      y: d3Link.path.source.y + this.travelVector.y!! * progress,
     };
   }
 
-  _calcTravelVector(d3Target: D3Node, d3Source: D3Node) {
-    const closestPoints = calcClosestPointsOfCircles(
-      makeCircleFromD3Node(d3Source),
-      makeCircleFromD3Node(d3Target)
-    );
-    this.sourceClosestPoint = closestPoints[0];
-    this.targetClosestPoint = closestPoints[1];
-    return calcJointVector(this.sourceClosestPoint, this.targetClosestPoint);
+  _calcTravelVector(d3Link: D3Link) {
+    return calcJointVector(d3Link.path.source, d3Link.path.target);
   }
 
   _destroy() {

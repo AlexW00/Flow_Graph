@@ -20,6 +20,8 @@ import Link, {
 import Node, { NodeType } from "../graph/Node";
 import Relationship from "../graph/Relationship";
 
+const nodes: Node[] = [];
+
 const _makeLinkContext = (
   semanticContexts: SemanticContext[],
   linkDirection: LinkDirection
@@ -61,7 +63,10 @@ const _makeNodeContext = (
 
   semanticContext.addAttribute(
     new Attribute("val", [node!!.getAttribute("lex")], (...deps) => {
-      return new Node(deps[0].value(), nodeType);
+      const n = new Node(deps[0].value(), nodeType);
+      const _n = nodes.find((_n) => _n.name === n.name);
+      if (_n) return _n;
+      nodes.push(n);
     })
   );
   return semanticContext; // return the semantic context
@@ -112,11 +117,13 @@ const semanticRuleset: SemanticRuleset = {
             nodes[1].getAttribute("val"),
           ],
           (...deps) => {
-            return new Relationship(
+            const r = new Relationship(
               deps[0].value(),
               deps[1].value(),
               deps[2].value()
             );
+
+            return r;
           }
         )
       );

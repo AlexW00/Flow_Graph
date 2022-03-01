@@ -7,6 +7,14 @@ const D3_CONFIG = {
     radius: 5,
     fill: "#000",
   },
+  link: {
+    strokeWidth: 1,
+    strokeColor: "black",
+    arrow: {
+      width: 10,
+      height: 10,
+    },
+  },
 };
 
 export default D3_CONFIG;

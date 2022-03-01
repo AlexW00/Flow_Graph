@@ -26,21 +26,22 @@ export default class D3Relationship
 
     this.$selection = this._append($svg);
     this.d3Source = new D3Node(this.source, this.$selection);
+    this.d3Source.addEventListener(D3Node.CLICKED_EVENT, () =>
+      this._emitParticle()
+    );
     this.d3Target = new D3Node(this.target, this.$selection);
     this.d3Link = new D3Link(
       this.$selection,
       this.link,
       this.getD3NodeConnection()
     );
-
-    this.d3Source.$selection.on("click", () => this._emitParticle());
   }
 
   _emitParticle() {
     const particle = new D3Particle(this);
     particle.addEventListener(
       D3Particle.PARTICLE_DESTROYED_EVENT,
-      (p: D3Particle) => this._onParticleDestroyed(p)
+      (p: D3Particle) => this._onParticleDestroyed()
     );
     this.d3Particles.push(particle);
   }
@@ -68,10 +69,15 @@ export default class D3Relationship
     return [this.d3Source, this.d3Target];
   }
 
-  getD3NodeConnection(): NodeConnection {
+  getD3NodeConnection(): D3NodeConnection {
     return {
       source: this.d3Source,
       target: this.d3Target,
     };
   }
+}
+
+export interface D3NodeConnection {
+  source: D3Node;
+  target: D3Node;
 }
