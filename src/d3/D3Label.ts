@@ -14,6 +14,8 @@ export default class D3Label implements D3Appendable {
       .text(function (d) {
         return d.name;
       })
+      .attr("text-anchor", "middle")
+      .attr("dy", ".35em")
       .attr("x", 0)
       .attr("y", 0);
   }
