@@ -49,7 +49,12 @@ export default class D3Graph extends Graph implements D3Appendable {
     );
 
     D3Simulation.simulation.nodes(_nodes).on("tick", () => {
+      console.log("tick");
+      D3Simulation.isActive = true;
       EventBus.notifyAll(new Event(D3Simulation.TICK_EVENT, {}));
+    });
+    D3Simulation.simulation.nodes(_nodes).on("end", () => {
+      D3Simulation.isActive = false;
     });
   }
 

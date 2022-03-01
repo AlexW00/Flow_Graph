@@ -9,8 +9,9 @@ import { Event, EventBus, Observable } from "../utils/Observable";
 import D3Appendable from "./D3Appendable";
 import D3Link from "./D3Link";
 import D3Relationship from "./D3Relationship";
-import D3Simulation from "./D3Simulation";
 import D3_CONFIG from "./D3_CONFIG";
+import * as d3 from "d3";
+import D3Simulation from "./D3Simulation";
 
 // ====================================================== //
 // ===================== D3Particle ===================== //
@@ -21,6 +22,7 @@ export default class D3Particle
   implements D3Appendable, SimulationNodeDatum
 {
   static PARTICLE_DESTROYED_EVENT: string = "particleDestroyed";
+  static PARTICLE_TICK_EVENT: string = "particleTick";
 
   d3Relationship: D3Relationship;
   $selection: d3.Selection<SVGGElement, this, SVGGElement, any>;
@@ -43,6 +45,12 @@ export default class D3Particle
   vy?: number;
   fx?: number;
   fy?: number;
+  timer: d3.Timer = d3.timer(() => {
+    if (!D3Simulation.isActive) {
+      EventBus.notifyAll(new Event(D3Simulation.TICK_EVENT, {}));
+    }
+    EventBus.notifyAll(new Event(D3Particle.PARTICLE_TICK_EVENT, {}));
+  });
 
   constructor(d3Relationship: D3Relationship) {
     super();
@@ -61,7 +69,7 @@ export default class D3Particle
       d3Relationship.link.linkOptions.linkStrength.type
     );
 
-    EventBus.addEventListener(D3Simulation.TICK_EVENT, this._update);
+    EventBus.addEventListener(D3Particle.PARTICLE_TICK_EVENT, this._update);
   }
 
   _appendText(
@@ -151,7 +159,7 @@ export default class D3Particle
   }
 
   _destroy() {
-    EventBus.removeEventListener(D3Simulation.TICK_EVENT, this._update);
+    EventBus.removeEventListener(D3Particle.PARTICLE_TICK_EVENT, this._update);
     this._remove();
     this.notifyAll(new Event(D3Particle.PARTICLE_DESTROYED_EVENT, this));
   }

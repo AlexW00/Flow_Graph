@@ -74,10 +74,15 @@ export default class D3Link extends Link implements D3Appendable, D3Tickable {
 
   onTicked = (): void => {
     this._updatePath();
-    this.$selection
-      .attr("x1", (d: any) => d.source.x)
-      .attr("y1", (d: any) => d.source.y)
-      .attr("x2", (d: any) => d.target.x)
-      .attr("y2", (d: any) => d.target.y);
+    try {
+      this.$selection
+        .attr("x1", (d: any) => d.source.x)
+        .attr("y1", (d: any) => d.source.y)
+        .attr("x2", (d: any) => d.target.x)
+        .attr("y2", (d: any) => d.target.y);
+    } catch (e) {
+      console.trace(e);
+      console.log(e);
+    }
   };
 }
