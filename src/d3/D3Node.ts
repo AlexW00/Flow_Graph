@@ -33,11 +33,16 @@ export default class D3Node
     super(node.name, node.nodeType);
     this.$selection = this._append($svg);
 
-    this.d3_Circle = new D3Circle(this.$selection);
+    this.d3_Circle = new D3Circle(this.$selection, this.weight);
     this.d3_Label = new D3Label(this.$selection);
 
     EventBus.addEventListener(D3Simulation.TICK_EVENT, this.onTicked);
     D3DragHandler.applyDragHandler(this.$selection as any);
+  }
+
+  updateWeight(weight: number) {
+    this.weight = weight;
+    this.d3_Circle.updateRadius(this.weight);
   }
 
   _append = (

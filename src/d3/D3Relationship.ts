@@ -33,18 +33,26 @@ export default class D3Relationship
       this.getD3NodeConnection()
     );
 
-    this.d3Source.$selection.on("click", (click) => this._emitParticle(click));
+    this.d3Source.$selection.on("click", () => this._emitParticle());
   }
 
-  _emitParticle(click: any) {
-    console.log("emitParticle", click);
+  _emitParticle() {
     const particle = new D3Particle(this);
-    particle.addEventListener(D3Particle.PARTICLE_DESTROYED_EVENT, () => {
-      this.d3Particles = this.d3Particles.filter((p) => p.id !== particle.id);
-    });
+    particle.addEventListener(
+      D3Particle.PARTICLE_DESTROYED_EVENT,
+      (p: D3Particle) => this._onParticleDestroyed(p)
+    );
     this.d3Particles.push(particle);
   }
 
+  _onParticleDestroyed(particle: D3Particle) {
+    this._removeOldestParticle();
+    //TODO : update node
+  }
+
+  _removeOldestParticle() {
+    this.d3Particles.shift();
+  }
   _append($svg: Selection<SVGElement, unknown, null, undefined>) {
     return $svg
       .append("g")

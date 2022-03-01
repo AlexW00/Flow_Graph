@@ -13,7 +13,6 @@ const inputString = `"Hello"-->[[World]]"Hello2"-->[[World2]]`;
 const compiler = new TinyComp(attributeGrammar, compilerOptions);
 
 const graph = compiler.compile(inputString) as Graph;
-console.log(graph);
 
 const app = document.querySelector<HTMLDivElement>("#app")!;
 

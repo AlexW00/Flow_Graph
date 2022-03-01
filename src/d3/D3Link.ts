@@ -23,8 +23,6 @@ export default class D3Link extends Link implements D3Appendable, D3Tickable {
     super(link.linkDirection, link.linkOptions);
     this.nodeConnection = nodeConnection;
     this._append($svg);
-
-    console.log("D3Link", this.nodeConnection);
     EventBus.addEventListener(D3Simulation.TICK_EVENT, this.onTicked);
   }
 

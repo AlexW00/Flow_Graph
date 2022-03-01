@@ -5,6 +5,7 @@ const D3_CONFIG = {
   particle: {
     travelTime: 1000,
     radius: 5,
+    fill: "#000",
   },
 };
 

@@ -6,6 +6,7 @@ export default class Node {
   // ~~~~~~~~~~~~~~~~~ Node ~~~~~~~~~~~~~~~~ //
   name: string;
   nodeType: NodeType;
+  weight: number = 50;
 
   constructor(name: string, nodeType: NodeType) {
     this.name = name;
