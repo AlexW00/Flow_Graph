@@ -1,4 +1,9 @@
 import { Selection, SimulationNodeDatum } from "d3";
+import {
+  getColorByType,
+  getLinkStrengthOperatorByType,
+  LinkStrengthType,
+} from "../graph/Link";
 import { calcJointVector } from "../utils/LinearAlgebra";
 import { Event, EventBus, Observable } from "../utils/Observable";
 import D3Appendable from "./D3Appendable";
@@ -18,7 +23,9 @@ export default class D3Particle
   static PARTICLE_DESTROYED_EVENT: string = "particleDestroyed";
 
   d3Relationship: D3Relationship;
-  $selection: d3.Selection<SVGCircleElement, any, any, undefined>;
+  $selection: d3.Selection<SVGGElement, this, SVGGElement, any>;
+  $circle: d3.Selection<SVGCircleElement, any, any, undefined>;
+  $text: d3.Selection<SVGTextElement, any, any, undefined>;
 
   // ~~~~~~~~~~~~~~~ Particle ~~~~~~~~~~~~~~ //
   id: string;
@@ -45,8 +52,47 @@ export default class D3Particle
     this._setInitialPosition(d3Relationship.d3Link);
 
     this.$selection = this._append(d3Relationship.$selection);
+    this.$circle = this._appendCircle(
+      this.$selection,
+      d3Relationship.link.linkOptions.linkStrength.type
+    );
+    this.$text = this._appendText(
+      this.$selection,
+      d3Relationship.link.linkOptions.linkStrength.type
+    );
 
     EventBus.addEventListener(D3Simulation.TICK_EVENT, this._update);
+  }
+
+  _appendText(
+    $selection: Selection<any, any, any, undefined>,
+    linkStrengthType: LinkStrengthType
+  ) {
+    return (
+      $selection
+        .append("text")
+        .text((d: any) => {
+          return getLinkStrengthOperatorByType(linkStrengthType);
+        })
+        .attr("dy", ".35em")
+        .attr("text-anchor", "middle")
+        // change text color
+        .attr("fill", D3_CONFIG.particle.textColor)
+        .attr("x", (d: any) => d.x)
+        .attr("y", (d: any) => d.y)
+    );
+  }
+
+  _appendCircle(
+    $selection: Selection<any, any, any, undefined>,
+    linkStrengthType: LinkStrengthType
+  ) {
+    return $selection
+      .append("circle")
+      .attr("cx", (d: any) => d.x)
+      .attr("cy", (d: any) => d.y)
+      .attr("r", D3_CONFIG.particle.radius)
+      .attr("fill", getColorByType(linkStrengthType));
   }
 
   _append($svg: Selection<any, any, any, undefined>) {
@@ -56,13 +102,7 @@ export default class D3Particle
       .selectAll(".particles")
       .data([this], (d: any) => d.d3Relationship.id())
       .enter()
-      .append("circle")
-      .attr("cx", (d: any) => d.x)
-      .attr("cy", (d: any) => d.y)
-      .attr("r", (d: any) => d.radius)
-      .attr("fill", function () {
-        return D3_CONFIG.particle.fill;
-      });
+      .append("g");
   }
 
   _update = () => {
@@ -94,11 +134,8 @@ export default class D3Particle
   _updatePosition(x: number, y: number) {
     this.x = x;
     this.y = y;
-    this.$selection
-      .transition()
-      .duration(0)
-      .attr("cx", this.x)
-      .attr("cy", this.y);
+    this.$circle.transition().duration(0).attr("cx", this.x).attr("cy", this.y);
+    this.$text.transition().duration(0).attr("x", this.x).attr("y", this.y);
   }
 
   _calcPosition(progress: number, d3Link: D3Link) {

@@ -16,7 +16,7 @@ const lexicalRuleset: LexicalRuleset = {
     regex: /\[\[[^\[^\]]+\]\]/,
   },
   link_body: {
-    regex: /-/,
+    regex: /--/,
   },
   link_direction_left: {
     regex: /</,

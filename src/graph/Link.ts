@@ -2,6 +2,8 @@
 // ======================== Link ======================== //
 // ====================================================== //
 
+import D3_CONFIG from "../d3/D3_CONFIG";
+
 export default class Link {
   linkDirection: LinkDirection;
   linkOptions: LinkOptions;
@@ -63,6 +65,36 @@ export function getLinkStrengthTypeByOperator(
       return LinkStrengthType.DIVIDE;
     default:
       return LinkStrengthType.PLUS;
+  }
+}
+
+export function getLinkStrengthOperatorByType(type: LinkStrengthType): string {
+  switch (type) {
+    case LinkStrengthType.PLUS:
+      return "+";
+    case LinkStrengthType.MINUS:
+      return "-";
+    case LinkStrengthType.MULTIPLY:
+      return "*";
+    case LinkStrengthType.DIVIDE:
+      return "/";
+    default:
+      return "+";
+  }
+}
+
+export function getColorByType(type: LinkStrengthType): string {
+  switch (type) {
+    case LinkStrengthType.PLUS:
+      return D3_CONFIG.particle.colors.plus;
+    case LinkStrengthType.MINUS:
+      return D3_CONFIG.particle.colors.minus;
+    case LinkStrengthType.MULTIPLY:
+      return D3_CONFIG.particle.colors.multiply;
+    case LinkStrengthType.DIVIDE:
+      return D3_CONFIG.particle.colors.divide;
+    default:
+      return "black";
   }
 }
 
