@@ -8,6 +8,7 @@ import D3Appendable from "./D3Appendable.js";
 import D3Relationship from "./D3Relationship.js";
 import Relationship from "../graph/Relationship.js";
 import D3Node from "./D3Node.js";
+import Node from "../graph/Node.js";
 import D3DragHandler from "./D3DragHandler.js";
 
 export default class D3Graph extends Graph implements D3Appendable {
@@ -56,6 +57,11 @@ export default class D3Graph extends Graph implements D3Appendable {
     D3Simulation.simulation.nodes(_nodes).on("end", () => {
       D3Simulation.isActive = false;
     });
+  }
+  delete() {
+    this.$svg.selectAll("*").remove();
+    D3Node.d3Nodes = [];
+    Node.nodes = [];
   }
 
   _append($svg: d3.Selection<SVGElement, unknown, null, undefined>) {

@@ -7,7 +7,28 @@
     <title>Vite App</title>
   </head>
   <body>
-    <div id="app"></div>
+    <nav class="flex absolute h-12 top-0 right-0 left-0 bg-gray-800 items-stretch">
+
+        <p class="inline-block text-2xl text-white align-middle">
+          FlowGraph
+        </p>
+
+    </nav>
+    <div id="app" class="flex h-screen flex-1 pt-12">
+      <div class="flex flex-row grow">
+        <div id="input_container" class="flex flex-col flex-auto left-0 w-1/4  border-2">
+          <label for="input" class="sticky flex-none top-0">Text input</label>
+          <textarea id="input" name="input" class="flex-auto resize-none rounded-md"></textarea> 
+          <button id="submit" class="flex-none mt-2">Submit</button>
+          <svg id="svg" class="flex-auto w-3/4 right-0 border-2 " ></svg>
+        </div>
+
+        
+      </div>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
+
 </html>
+
+
