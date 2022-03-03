@@ -7,7 +7,7 @@ import { LexicalRuleset } from "tiny-comp";
 const lexicalRuleset: LexicalRuleset = {
   // the name of the token
   whitespace: {
-    regex: /([^\S\r\n])/, // the regex that matches the token
+    regex: /([\s\r\n])/, // the regex that matches the token
   },
   text_node: {
     regex: /"[^"]+"/,
