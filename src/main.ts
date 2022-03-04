@@ -9,15 +9,8 @@ const compilerOptions: TinyCompOptions = {
   startSymbol: "GRAPH",
   ignoreTokensNamed: ["whitespace"],
 };
-const resetSvg = (svg: SVGSVGElement) => {
-  svg.innerHTML = "";
-};
 
-let inputString = `"Hello"--(-1)-->[[World]]
-"Hello"--(/2)-->[[World2]]
-[[World]]---->"Hello2"
-"Hello2"--(*2)-->[[World2]]
-"Hello2"---->"Hello"`;
+let inputString = D3_CONFIG.website.startInput;
 const compiler = new TinyComp(attributeGrammar, compilerOptions);
 
 let graph = compiler.compile(inputString) as Graph;

@@ -25,7 +25,7 @@ export class LinkOptions {
     linkSpeed: number = LINK_DEFAULT_VALUES.speed
   ) {
     this.linkStrength = linkStrength;
-    this.linkSpeed = linkSpeed;
+    this.linkSpeed = _smartStringParse(linkSpeed);
   }
 }
 
@@ -36,12 +36,18 @@ export class LinkStrength {
   strength: number;
 
   constructor(
-    strength = LINK_DEFAULT_VALUES.strength,
+    strength: number | string = LINK_DEFAULT_VALUES.strength,
     linkStrengthType = LINK_DEFAULT_VALUES.strengthType
   ) {
     this.type = linkStrengthType;
-    this.strength = strength;
+    this.strength = _smartStringParse(strength);
   }
+}
+
+function _smartStringParse(str: number | string): number {
+  return typeof str === typeof String()
+    ? parseInt(str as string)
+    : (str as number);
 }
 
 export enum LinkStrengthType {

@@ -26,6 +26,13 @@ const D3_CONFIG = {
       height: 10,
     },
   },
+  website: {
+    startInput: `"Hello"--(-1)-->[[World]]
+"Hello"--(-2)-->[[World2]]
+[[World]]---->"Hello2"
+"Hello2"--(+2)-->[[World2]]
+"Hello2"---->"Hello"`,
+  },
 };
 
 export default D3_CONFIG;

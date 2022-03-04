@@ -11,6 +11,7 @@ import D3DragHandler from "./D3DragHandler";
 import { LinkStrength, performOperation } from "../graph/Link";
 import D3_CONFIG from "./D3_CONFIG";
 import D3Graph from "./D3Graph";
+import D3Link from "./D3Link";
 
 export default class D3Node
   extends Node
@@ -55,12 +56,17 @@ export default class D3Node
   }
 
   updateWeight(linkStrength: LinkStrength) {
+    console.log("updateWeight", linkStrength);
     this.weight = performOperation(
       this.weight,
       linkStrength.strength,
       linkStrength.type
     );
     this.d3_Circle.updateRadius(this.weight);
+    this.onTicked();
+    EventBus.notifyAll(
+      new Event(D3Link.UPDATE_LINKS_EVENT, { updatedNodeId: this.id })
+    );
     this.notifyAll(new Event(D3Node.EMIT_PARTICLE_EVENT, this));
   }
 
@@ -84,8 +90,6 @@ export default class D3Node
     const width = D3Graph.width,
       height = D3Graph.height,
       radius = this.d3_Circle.radius;
-
-    console.log(width);
     // keep in bounds
     this.$selection.attr("transform", function (d) {
       d.x = Math.max(radius, Math.min(width - radius, d.x));

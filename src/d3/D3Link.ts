@@ -2,7 +2,7 @@ import Link from "../graph/Link";
 import D3Appendable from "./D3Appendable";
 import D3Relationship, { D3NodeConnection } from "./D3Relationship";
 import D3Tickable from "./D3Tickable";
-import { EventBus } from "../utils/Observable";
+import { Event, EventBus } from "../utils/Observable";
 import D3Simulation from "./D3Simulation";
 import {
   calcClosestPointsOfCircles,
@@ -12,6 +12,8 @@ import {
 import D3_CONFIG from "./D3_CONFIG";
 
 export default class D3Link extends Link implements D3Appendable, D3Tickable {
+  static UPDATE_LINKS_EVENT: string = "updateLinks";
+
   $selection!: any;
   nodeConnection: D3NodeConnection;
   path: VectorPair = {
@@ -28,6 +30,7 @@ export default class D3Link extends Link implements D3Appendable, D3Tickable {
     this.nodeConnection = nodeConnection;
     this._append($svg);
     EventBus.addEventListener(D3Simulation.TICK_EVENT, this.onTicked);
+    EventBus.addEventListener(D3Link.UPDATE_LINKS_EVENT, this._onUpdateLinks);
   }
 
   _append(
@@ -45,6 +48,11 @@ export default class D3Link extends Link implements D3Appendable, D3Tickable {
       .style("stroke-width", D3_CONFIG.link.strokeWidth)
       .attr("marker-end", () => "url(#arrow)");
   }
+
+  _onUpdateLinks = (e: Event) => {
+    const data = e.data;
+    if (data.updatedNodeId === this.nodeConnection.target.id) this.onTicked();
+  };
 
   _appendArrowHead(
     $svg: d3.Selection<SVGGElement, D3Relationship, SVGGElement, unknown>

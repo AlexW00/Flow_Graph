@@ -45,11 +45,11 @@ export default class D3Particle
   vy?: number;
   fx?: number;
   fy?: number;
-  timer: d3.Timer = d3.timer(() => {
-    if (!D3Simulation.isActive) {
-      EventBus.notifyAll(new Event(D3Simulation.TICK_EVENT, {}));
-    }
-    EventBus.notifyAll(new Event(D3Particle.PARTICLE_TICK_EVENT, {}));
+
+  static particles: D3Particle[] = [];
+  static timer: d3.Timer = d3.timer(() => {
+    if (this.particles.length !== 0)
+      EventBus.notifyAll(new Event(D3Particle.PARTICLE_TICK_EVENT, {}));
   });
 
   constructor(d3Relationship: D3Relationship) {
@@ -70,6 +70,7 @@ export default class D3Particle
     );
 
     EventBus.addEventListener(D3Particle.PARTICLE_TICK_EVENT, this._update);
+    D3Particle.particles.push(this);
   }
 
   _appendText(
@@ -162,6 +163,7 @@ export default class D3Particle
     EventBus.removeEventListener(D3Particle.PARTICLE_TICK_EVENT, this._update);
     this._remove();
     this.notifyAll(new Event(D3Particle.PARTICLE_DESTROYED_EVENT, this));
+    D3Particle.particles.splice(D3Particle.particles.indexOf(this), 1);
   }
 
   _remove() {
