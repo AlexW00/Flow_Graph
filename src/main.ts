@@ -13,7 +13,11 @@ const resetSvg = (svg: SVGSVGElement) => {
   svg.innerHTML = "";
 };
 
-let inputString = `"Hello"--(-1)-->[[World]] "Hello"--(/2)-->[[World2]] [[World]]---->"Hello2" "Hello2"--(*2)-->[[World2]]  "Hello2"---->"Hello"`;
+let inputString = `"Hello"--(-1)-->[[World]]
+"Hello"--(/2)-->[[World2]]
+[[World]]---->"Hello2"
+"Hello2"--(*2)-->[[World2]]
+"Hello2"---->"Hello"`;
 const compiler = new TinyComp(attributeGrammar, compilerOptions);
 
 let graph = compiler.compile(inputString) as Graph;

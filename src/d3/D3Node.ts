@@ -10,6 +10,7 @@ import D3Simulation from "./D3Simulation";
 import D3DragHandler from "./D3DragHandler";
 import { LinkStrength, performOperation } from "../graph/Link";
 import D3_CONFIG from "./D3_CONFIG";
+import D3Graph from "./D3Graph";
 
 export default class D3Node
   extends Node
@@ -80,9 +81,11 @@ export default class D3Node
   }
 
   onTicked = (): void => {
-    const width = D3_CONFIG.svg.width,
-      height = D3_CONFIG.svg.height,
+    const width = D3Graph.width,
+      height = D3Graph.height,
       radius = this.d3_Circle.radius;
+
+    console.log(width);
     // keep in bounds
     this.$selection.attr("transform", function (d) {
       d.x = Math.max(radius, Math.min(width - radius, d.x));

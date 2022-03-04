@@ -15,8 +15,8 @@ export default class D3Graph extends Graph implements D3Appendable {
   $doc: Document;
   $svg: d3.Selection<SVGElement, unknown, null, undefined>;
 
-  width: number;
-  height: number;
+  static width: number;
+  static height: number;
 
   d3_color = D3_CONFIG.color;
   d3Simulation: d3.Simulation<d3.SimulationNodeDatum, undefined>;
@@ -29,8 +29,9 @@ export default class D3Graph extends Graph implements D3Appendable {
     super(graph.relationships);
     this.$doc = doc;
     this.$svg = d3.select(doc.body).select<SVGElement>("svg");
-    this.width = parseInt(this.$svg.attr("width"));
-    this.height = parseInt(this.$svg.attr("height"));
+    // get width of element with id "svg"
+    D3Graph.width = this.$svg.node()?.getBoundingClientRect().width ?? 0;
+    D3Graph.height = this.$svg.node()?.getBoundingClientRect().height ?? 0;
     this.d3Simulation = D3Simulation.create(d3, this);
     this.d3DragHandler = D3DragHandler.create(d3, this.d3Simulation);
 
