@@ -66,7 +66,8 @@ export default class D3Link extends Link implements D3Appendable, D3Tickable {
       .attr("markerWidth", D3_CONFIG.link.arrow.width)
       .attr("markerHeight", D3_CONFIG.link.arrow.height)
       .attr("orient", "auto")
-      .style("stroke", D3_CONFIG.link.strokeColor)
+      // change color
+      .style("fill", D3_CONFIG.link.strokeColor)
       .append("svg:path")
       .attr("d", "M0,-5L10,0L0,5");
   }
@@ -83,6 +84,7 @@ export default class D3Link extends Link implements D3Appendable, D3Tickable {
   onTicked = (): void => {
     this._updatePath();
     try {
+      //console.log(this.path);
       this.$selection
         .attr("x1", (d: any) => d.source.x)
         .attr("y1", (d: any) => d.source.y)
@@ -90,7 +92,7 @@ export default class D3Link extends Link implements D3Appendable, D3Tickable {
         .attr("y2", (d: any) => d.target.y);
     } catch (e) {
       console.trace(e);
-      console.log(e);
+      console.log(e, "SHIT");
     }
   };
 }

@@ -8,7 +8,7 @@ export default class Node extends Observable {
   // ~~~~~~~~~~~~~~~~~ Node ~~~~~~~~~~~~~~~~ //
   name!: string;
   nodeType!: NodeType;
-  weight: number = 50;
+  weight: number = 100;
 
   static nodes: Node[] = [];
 

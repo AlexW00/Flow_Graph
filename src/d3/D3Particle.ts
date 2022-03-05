@@ -47,10 +47,6 @@ export default class D3Particle
   fy?: number;
 
   static particles: D3Particle[] = [];
-  static timer: d3.Timer = d3.timer(() => {
-    if (this.particles.length !== 0)
-      EventBus.notifyAll(new Event(D3Particle.PARTICLE_TICK_EVENT, {}));
-  });
 
   constructor(d3Relationship: D3Relationship) {
     super();
@@ -69,7 +65,7 @@ export default class D3Particle
       d3Relationship.link.linkOptions.linkStrength.type
     );
 
-    EventBus.addEventListener(D3Particle.PARTICLE_TICK_EVENT, this._update);
+    EventBus.addEventListener(D3Simulation.TICK_EVENT, this._update);
     D3Particle.particles.push(this);
   }
 
@@ -77,19 +73,17 @@ export default class D3Particle
     $selection: Selection<any, any, any, undefined>,
     linkStrengthType: LinkStrengthType
   ) {
-    return (
-      $selection
-        .append("text")
-        .text((d: any) => {
-          return getLinkStrengthOperatorByType(linkStrengthType);
-        })
-        .attr("dy", ".35em")
-        .attr("text-anchor", "middle")
-        // change text color
-        .attr("fill", D3_CONFIG.particle.textColor)
-        .attr("x", (d: any) => d.x)
-        .attr("y", (d: any) => d.y)
-    );
+    return $selection
+      .append("text")
+      .text((d: any) => {
+        return getLinkStrengthOperatorByType(linkStrengthType);
+      })
+      .attr("dy", ".35em")
+      .attr("text-anchor", "middle")
+      .attr("font-size", "10px")
+      .attr("fill", D3_CONFIG.particle.textColor)
+      .attr("x", (d: any) => d.x)
+      .attr("y", (d: any) => d.y);
   }
 
   _appendCircle(
@@ -124,8 +118,8 @@ export default class D3Particle
 
   _calcTravelTime(): number {
     return (
-      this.d3Relationship.link.linkOptions.linkSpeed *
-      D3_CONFIG.particle.travelTime
+      D3_CONFIG.particle.travelTime /
+      this.d3Relationship.link.linkOptions.linkSpeed
     );
   }
 
@@ -160,7 +154,7 @@ export default class D3Particle
   }
 
   _destroy() {
-    EventBus.removeEventListener(D3Particle.PARTICLE_TICK_EVENT, this._update);
+    EventBus.removeEventListener(D3Simulation.TICK_EVENT, this._update);
     this._remove();
     this.notifyAll(new Event(D3Particle.PARTICLE_DESTROYED_EVENT, this));
     D3Particle.particles.splice(D3Particle.particles.indexOf(this), 1);

@@ -8,19 +8,15 @@ export default class D3Circle implements D3Appendable {
 
   constructor(
     $svg: d3.Selection<SVGGElement, D3Node, any, unknown>,
-    nodeWeigth: number
+    radius: number
   ) {
-    this.radius = this.getRadiusFromNodeWeigth(nodeWeigth);
+    this.radius = radius;
     this.$selection = this._append($svg);
   }
 
-  updateRadius(nodeWeigth: number) {
-    this.radius = this.getRadiusFromNodeWeigth(nodeWeigth);
+  updateRadius(radius: number) {
+    this.radius = radius;
     this.$selection.attr("r", this.radius);
-  }
-
-  getRadiusFromNodeWeigth(nodeWeigth: number) {
-    return nodeWeigth;
   }
 
   _append($svg: d3.Selection<SVGGElement, D3Node, SVGGElement, unknown>) {

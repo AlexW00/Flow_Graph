@@ -1,14 +1,10 @@
 import * as d3 from "d3";
 
 const D3_CONFIG = {
-  svg: {
-    width: 1000,
-    height: 1000,
-  },
   color: d3.scaleOrdinal(d3.schemeCategory10),
   particle: {
     travelTime: 1000,
-    radius: 10,
+    radius: 7,
     fill: "#000",
     textColor: "white",
     colors: {
@@ -20,11 +16,14 @@ const D3_CONFIG = {
   },
   link: {
     strokeWidth: 1,
-    strokeColor: "black",
+    strokeColor: "#808080",
     arrow: {
       width: 10,
       height: 10,
     },
+  },
+  node: {
+    weightToRadiusCoefficient: 0.5,
   },
   website: {
     startInput: `"Hello"--(-1)-->[[World]]

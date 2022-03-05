@@ -4,16 +4,31 @@ import D3Node from "./D3Node";
 export default class D3Label implements D3Appendable {
   $selection: d3.Selection<any, any, any, undefined>;
 
-  constructor($svg: d3.Selection<SVGGElement, D3Node, any, unknown>) {
-    this.$selection = this._append($svg);
+  constructor(
+    $svg: d3.Selection<SVGGElement, D3Node, any, unknown>,
+    radius: number
+  ) {
+    this.$selection = this._append($svg, radius);
   }
 
-  _append($svg: d3.Selection<any, any, any, undefined>) {
+  updateTextSize(radius: number) {
+    this.$selection.attr(
+      "font-size",
+      this._calculateFontSizeFromRadius(radius)
+    );
+  }
+
+  _calculateFontSizeFromRadius(radius: number) {
+    return radius / 4;
+  }
+
+  _append($svg: d3.Selection<any, any, any, undefined>, radius: number) {
     return $svg
       .append("text")
       .text(function (d) {
         return d.name;
       })
+      .attr("font-size", this._calculateFontSizeFromRadius(radius))
       .attr("text-anchor", "middle")
       .attr("dy", ".35em")
       .attr("x", 0)

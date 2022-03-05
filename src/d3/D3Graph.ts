@@ -10,6 +10,7 @@ import Relationship from "../graph/Relationship.js";
 import D3Node from "./D3Node.js";
 import Node from "../graph/Node.js";
 import D3DragHandler from "./D3DragHandler.js";
+import { zoom } from "d3";
 
 export default class D3Graph extends Graph implements D3Appendable {
   $doc: Document;
@@ -30,6 +31,7 @@ export default class D3Graph extends Graph implements D3Appendable {
     this.$doc = doc;
     this.$svg = d3.select(doc.body).select<SVGElement>("svg");
     // get width of element with id "svg"
+
     D3Graph.width = this.$svg.node()?.getBoundingClientRect().width ?? 0;
     D3Graph.height = this.$svg.node()?.getBoundingClientRect().height ?? 0;
     this.d3Simulation = D3Simulation.create(d3, this);
@@ -55,9 +57,17 @@ export default class D3Graph extends Graph implements D3Appendable {
       EventBus.notifyAll(new Event(D3Simulation.TICK_EVENT, {}));
     });
     D3Simulation.simulation.nodes(_nodes).on("end", () => {
-      D3Simulation.isActive = false;
+      D3Simulation.simulation.alphaTarget(0.01).restart();
     });
+
+    const zoomBehavior = d3.zoom().on("zoom", (d) => this._onZoom(d)) as any;
+    this.$svg.call(zoomBehavior).on("dblclick.zoom", null);
   }
+
+  _onZoom(d: any) {
+    this.$selection.attr("transform", d.transform);
+  }
+
   delete() {
     this.$svg.selectAll("*").remove();
     D3Node.d3Nodes = [];
@@ -67,4 +77,9 @@ export default class D3Graph extends Graph implements D3Appendable {
   _append($svg: d3.Selection<SVGElement, unknown, null, undefined>) {
     return $svg.append("g").attr("class", "graph");
   }
+
+  zoomed = (_d) => {
+    console.log("zoomed", _d);
+    this.$svg.attr("transform", () => _d.transform);
+  };
 }

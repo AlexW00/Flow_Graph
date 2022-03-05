@@ -10,8 +10,7 @@ import D3Simulation from "./D3Simulation";
 import D3DragHandler from "./D3DragHandler";
 import { LinkStrength, performOperation } from "../graph/Link";
 import D3_CONFIG from "./D3_CONFIG";
-import D3Graph from "./D3Graph";
-import D3Link from "./D3Link";
+import * as d3 from "d3";
 
 export default class D3Node
   extends Node
@@ -41,33 +40,31 @@ export default class D3Node
     if (existingNode) return existingNode;
     super(node.name, node.nodeType);
     this.$selection = this._append($svg);
-
-    this.d3_Circle = new D3Circle(this.$selection, this.weight);
-    this.d3_Label = new D3Label(this.$selection);
+    this.d3_Circle = new D3Circle(this.$selection, this.weightToRadius());
+    this.d3_Label = new D3Label(this.$selection, this.weightToRadius());
 
     EventBus.addEventListener(D3Simulation.TICK_EVENT, this.onTicked);
     D3DragHandler.applyDragHandler(this.$selection as any);
-
-    D3Node.d3Nodes.push(this);
-
     this.$selection.on("click", () =>
       this.notifyAll(new Event(D3Node.EMIT_PARTICLE_EVENT, this))
     );
+    D3Node.d3Nodes.push(this);
+  }
+
+  weightToRadius(): number {
+    return this.weight * D3_CONFIG.node.weightToRadiusCoefficient;
   }
 
   updateWeight(linkStrength: LinkStrength) {
-    console.log("updateWeight", linkStrength);
     this.weight = performOperation(
       this.weight,
       linkStrength.strength,
       linkStrength.type
     );
-    this.d3_Circle.updateRadius(this.weight);
-    this.onTicked();
-    EventBus.notifyAll(
-      new Event(D3Link.UPDATE_LINKS_EVENT, { updatedNodeId: this.id })
-    );
+    this.d3_Circle.updateRadius(this.weightToRadius());
+    this.d3_Label.updateTextSize(this.weightToRadius());
     this.notifyAll(new Event(D3Node.EMIT_PARTICLE_EVENT, this));
+    D3Simulation.updateChargeForceStrength();
   }
 
   _append = (
@@ -87,14 +84,6 @@ export default class D3Node
   }
 
   onTicked = (): void => {
-    const width = D3Graph.width,
-      height = D3Graph.height,
-      radius = this.d3_Circle.radius;
-    // keep in bounds
-    this.$selection.attr("transform", function (d) {
-      d.x = Math.max(radius, Math.min(width - radius, d.x));
-      d.y = Math.max(radius, Math.min(height - radius, d.y));
-      return "translate(" + d.x + "," + d.y + ")";
-    });
+    this.$selection.attr("transform", `translate(${this.x}, ${this.y})`);
   };
 }

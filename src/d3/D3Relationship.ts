@@ -49,8 +49,6 @@ export default class D3Relationship
   _onParticleDestroyed() {
     this._removeOldestParticle();
     this.d3Target.updateWeight(this.link.linkOptions.linkStrength);
-    this.d3Link.onTicked();
-    //TODO : update node
   }
 
   _removeOldestParticle() {

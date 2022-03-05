@@ -18,7 +18,7 @@ export interface VectorPair {
 export function makeCircleFromD3Node(d3Node: D3Node): Circle {
   return {
     position: { x: d3Node.x!!, y: d3Node.y!! },
-    radius: d3Node.d3_Circle.radius,
+    radius: d3Node.weightToRadius(),
   };
 }
 
