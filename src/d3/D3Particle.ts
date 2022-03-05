@@ -5,7 +5,7 @@ import {
   LinkStrengthType,
 } from "../graph/Link";
 import { calcJointVector } from "../utils/LinearAlgebra";
-import { Event, EventBus, Observable } from "../utils/Observable";
+import { Event, D3EventBus, Observable } from "../utils/Observable";
 import D3Appendable from "./D3Appendable";
 import D3Link from "./D3Link";
 import D3Relationship from "./D3Relationship";
@@ -65,7 +65,7 @@ export default class D3Particle
       d3Relationship.link.linkOptions.linkStrength.type
     );
 
-    EventBus.addEventListener(D3Simulation.TICK_EVENT, this._update);
+    D3EventBus.addEventListener(D3Simulation.TICK_EVENT, this._update);
     D3Particle.particles.push(this);
   }
 
@@ -154,7 +154,7 @@ export default class D3Particle
   }
 
   _destroy() {
-    EventBus.removeEventListener(D3Simulation.TICK_EVENT, this._update);
+    D3EventBus.removeEventListener(D3Simulation.TICK_EVENT, this._update);
     this._remove();
     this.notifyAll(new Event(D3Particle.PARTICLE_DESTROYED_EVENT, this));
     D3Particle.particles.splice(D3Particle.particles.indexOf(this), 1);

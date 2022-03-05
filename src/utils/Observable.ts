@@ -50,6 +50,10 @@ export class Observable {
       }
     }
   }
+
+  clear() {
+    this.listener = {};
+  }
 }
 
 // ====================================================== //
@@ -61,4 +65,5 @@ export class Observable {
 // 2. Send event to EventBus: EventBus.notifyAll(new Event(...));
 // 3. Listen to events via: EventBus.addEventListener(EVENT_TYPE, (event) => {...});
 
-export const EventBus = new Observable();
+export const D3EventBus = new Observable();
+export const WebEventBus = new Observable();

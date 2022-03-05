@@ -1,7 +1,10 @@
 export default class D3DragHandler {
-  static dragHandler: d3.DragBehavior<Element, unknown, unknown>;
+  static dragHandler: d3.DragBehavior<Element, unknown, unknown> | null = null;
 
-  static create(d3: any, simulation: d3.Simulation<any, any>) {
+  static create(
+    d3: any,
+    simulation: d3.Simulation<any, any>
+  ): d3.DragBehavior<Element, unknown, unknown> {
     const dragstarted = (
       e: { active: any },
       d: { fx: any; x: any; fy: any; y: any }
@@ -28,12 +31,12 @@ export default class D3DragHandler {
       .on("drag", dragged)
       .on("end", dragended);
 
-    return D3DragHandler.dragHandler;
+    return D3DragHandler.dragHandler!;
   }
 
   static applyDragHandler(
     selection: d3.Selection<Element, unknown, any, any>
   ): void {
-    D3DragHandler.dragHandler(selection);
+    D3DragHandler.dragHandler!(selection);
   }
 }

@@ -5,7 +5,7 @@ import D3Circle from "./D3Circle";
 import D3Label from "./D3Label";
 import D3Relationship from "./D3Relationship";
 import D3Tickable from "./D3Tickable";
-import { Event, EventBus } from "../utils/Observable";
+import { Event, D3EventBus } from "../utils/Observable";
 import D3Simulation from "./D3Simulation";
 import D3DragHandler from "./D3DragHandler";
 import { LinkStrength, performOperation } from "../graph/Link";
@@ -43,7 +43,7 @@ export default class D3Node
     this.d3_Circle = new D3Circle(this.$selection, this.weightToRadius());
     this.d3_Label = new D3Label(this.$selection, this.weightToRadius());
 
-    EventBus.addEventListener(D3Simulation.TICK_EVENT, this.onTicked);
+    D3EventBus.addEventListener(D3Simulation.TICK_EVENT, this.onTicked);
     D3DragHandler.applyDragHandler(this.$selection as any);
     this.$selection.on("click", () =>
       this.notifyAll(new Event(D3Node.EMIT_PARTICLE_EVENT, this))

@@ -1,7 +1,7 @@
 import Graph from "../graph/Graph.js";
 import * as d3 from "d3";
 import D3_CONFIG from "./D3_CONFIG.js";
-import { Observable, Event, EventBus } from "../utils/Observable.js";
+import { Observable, Event, D3EventBus } from "../utils/Observable.js";
 
 import D3Simulation from "./D3Simulation.js";
 import D3Appendable from "./D3Appendable.js";
@@ -34,7 +34,7 @@ export default class D3Graph extends Graph implements D3Appendable {
 
     D3Graph.width = this.$svg.node()?.getBoundingClientRect().width ?? 0;
     D3Graph.height = this.$svg.node()?.getBoundingClientRect().height ?? 0;
-    this.d3Simulation = D3Simulation.create(d3, this);
+    this.d3Simulation = D3Simulation.create(d3);
     this.d3DragHandler = D3DragHandler.create(d3, this.d3Simulation);
 
     this.$selection = this._append(this.$svg);
@@ -52,12 +52,12 @@ export default class D3Graph extends Graph implements D3Appendable {
       []
     );
 
-    D3Simulation.simulation.nodes(_nodes).on("tick", () => {
+    D3Simulation.simulation!.nodes(_nodes).on("tick", () => {
       D3Simulation.isActive = true;
-      EventBus.notifyAll(new Event(D3Simulation.TICK_EVENT, {}));
+      D3EventBus.notifyAll(new Event(D3Simulation.TICK_EVENT, {}));
     });
-    D3Simulation.simulation.nodes(_nodes).on("end", () => {
-      D3Simulation.simulation.alphaTarget(0.01).restart();
+    D3Simulation.simulation!.nodes(_nodes).on("end", () => {
+      D3Simulation.simulation!.alphaTarget(0.01).restart();
     });
 
     const zoomBehavior = d3.zoom().on("zoom", (d) => this._onZoom(d)) as any;
@@ -70,6 +70,9 @@ export default class D3Graph extends Graph implements D3Appendable {
 
   delete() {
     this.$svg.selectAll("*").remove();
+    D3Simulation.simulation = null;
+    D3DragHandler.dragHandler = null;
+    D3EventBus.clear();
     D3Node.d3Nodes = [];
     Node.nodes = [];
   }
@@ -78,8 +81,8 @@ export default class D3Graph extends Graph implements D3Appendable {
     return $svg.append("g").attr("class", "graph");
   }
 
-  zoomed = (_d) => {
-    console.log("zoomed", _d);
-    this.$svg.attr("transform", () => _d.transform);
+  zoomed = (d: any) => {
+    console.log("zoomed", d);
+    this.$svg.attr("transform", () => d.transform);
   };
 }

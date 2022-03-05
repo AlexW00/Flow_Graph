@@ -2,7 +2,7 @@ import Link from "../graph/Link";
 import D3Appendable from "./D3Appendable";
 import D3Relationship, { D3NodeConnection } from "./D3Relationship";
 import D3Tickable from "./D3Tickable";
-import { Event, EventBus } from "../utils/Observable";
+import { Event, D3EventBus } from "../utils/Observable";
 import D3Simulation from "./D3Simulation";
 import {
   calcClosestPointsOfCircles,
@@ -29,8 +29,8 @@ export default class D3Link extends Link implements D3Appendable, D3Tickable {
     super(link.linkDirection, link.linkOptions);
     this.nodeConnection = nodeConnection;
     this._append($svg);
-    EventBus.addEventListener(D3Simulation.TICK_EVENT, this.onTicked);
-    EventBus.addEventListener(D3Link.UPDATE_LINKS_EVENT, this._onUpdateLinks);
+    D3EventBus.addEventListener(D3Simulation.TICK_EVENT, this.onTicked);
+    D3EventBus.addEventListener(D3Link.UPDATE_LINKS_EVENT, this._onUpdateLinks);
   }
 
   _append(

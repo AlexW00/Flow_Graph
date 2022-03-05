@@ -1,15 +1,15 @@
 import D3Graph from "./D3Graph";
 import D3Node from "./D3Node";
-import D3Tickable from "./D3Tickable";
 
 class D3Simulation {
-  static simulation: d3.Simulation<d3.SimulationNodeDatum, undefined>;
+  static simulation: d3.Simulation<d3.SimulationNodeDatum, undefined> | null =
+    null;
   static TICK_EVENT = "d3_tick";
   static isActive = false;
 
   static updateChargeForceStrength() {
     D3Simulation.simulation
-      .force("charge")
+      ?.force("charge")
       ?.strength(D3Simulation.chargeForceStrength);
     //if (!D3Simulation.isActive) D3Simulation.simulation.alpha(1).restart();
   }
@@ -35,7 +35,7 @@ class D3Simulation {
         })
       )
       .force("charge", d3.forceManyBody().strength(this.chargeForceStrength));
-    return D3Simulation.simulation;
+    return D3Simulation.simulation!;
   }
 }
 
