@@ -19,7 +19,7 @@ export default class D3Graph extends Graph implements D3Appendable {
   static width: number;
   static height: number;
 
-  d3_color = D3_CONFIG.color;
+  d3_color = D3_CONFIG.colorScale;
   d3Simulation: d3.Simulation<d3.SimulationNodeDatum, undefined>;
   d3DragHandler: D3DragHandler;
 

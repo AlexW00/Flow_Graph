@@ -1,6 +1,7 @@
+import { Event, LiveData } from "../utils/Observable";
+import WebModel from "../web/WebModel";
 import D3Appendable from "./D3Appendable";
 import D3Node from "./D3Node";
-import D3_CONFIG from "./D3_CONFIG";
 
 export default class D3Circle implements D3Appendable {
   $selection: d3.Selection<SVGCircleElement, D3Node, SVGGElement, unknown>;
@@ -11,7 +12,16 @@ export default class D3Circle implements D3Appendable {
     radius: number
   ) {
     this.radius = radius;
+
     this.$selection = this._append($svg);
+    WebModel.nodeColor.addEventListener(
+      LiveData.EVENT_DATA_CHANGED,
+      (e: Event) => this._changeColor(e.data)
+    );
+  }
+
+  _changeColor(color: string) {
+    this.$selection.attr("fill", color);
   }
 
   updateRadius(radius: number) {
@@ -23,8 +33,6 @@ export default class D3Circle implements D3Appendable {
     return $svg
       .append("circle")
       .attr("r", this.radius)
-      .attr("fill", () => {
-        return D3_CONFIG.color("1");
-      });
+      .attr("fill", WebModel.nodeColor.data);
   }
 }

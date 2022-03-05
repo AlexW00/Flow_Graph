@@ -56,6 +56,24 @@ export class Observable {
   }
 }
 
+export class LiveData extends Observable {
+  static EVENT_DATA_CHANGED: string = "dataChanged";
+  private _data: any;
+  constructor(data: any) {
+    super();
+    this._data = data;
+  }
+
+  get data() {
+    return this._data;
+  }
+
+  set data(data: any) {
+    this._data = data;
+    this.notifyAll(new Event(LiveData.EVENT_DATA_CHANGED, data));
+  }
+}
+
 // ====================================================== //
 // ====================== EventBus ====================== //
 // ====================================================== //

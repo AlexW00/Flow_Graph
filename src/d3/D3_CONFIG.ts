@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 
 const D3_CONFIG = {
-  color: d3.scaleOrdinal(d3.schemeCategory10),
+  colorScale: d3.scaleOrdinal(d3.schemeCategory10),
   particle: {
     travelTime: 1000,
     radius: 7,
@@ -24,7 +24,9 @@ const D3_CONFIG = {
   },
   node: {
     weightToRadiusCoefficient: 0.5,
+    fillColor: "#0284C7",
   },
+
   website: {
     startInput: `"Hello"--(-1)-->[[World]]
 "Hello"--(-2)-->[[World2]]

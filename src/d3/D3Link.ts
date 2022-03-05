@@ -2,7 +2,7 @@ import Link from "../graph/Link";
 import D3Appendable from "./D3Appendable";
 import D3Relationship, { D3NodeConnection } from "./D3Relationship";
 import D3Tickable from "./D3Tickable";
-import { Event, D3EventBus } from "../utils/Observable";
+import { Event, D3EventBus, LiveData } from "../utils/Observable";
 import D3Simulation from "./D3Simulation";
 import {
   calcClosestPointsOfCircles,
@@ -10,11 +10,14 @@ import {
   VectorPair,
 } from "../utils/LinearAlgebra";
 import D3_CONFIG from "./D3_CONFIG";
+import WebModel from "../web/WebModel";
 
 export default class D3Link extends Link implements D3Appendable, D3Tickable {
   static UPDATE_LINKS_EVENT: string = "updateLinks";
 
   $selection!: any;
+  $arrowHead: any;
+
   nodeConnection: D3NodeConnection;
   path: VectorPair = {
     source: { x: 0, y: 0 },
@@ -31,12 +34,21 @@ export default class D3Link extends Link implements D3Appendable, D3Tickable {
     this._append($svg);
     D3EventBus.addEventListener(D3Simulation.TICK_EVENT, this.onTicked);
     D3EventBus.addEventListener(D3Link.UPDATE_LINKS_EVENT, this._onUpdateLinks);
+    WebModel.linkColor.addEventListener(
+      LiveData.EVENT_DATA_CHANGED,
+      (e: Event) => this._changeColor(e.data)
+    );
+  }
+
+  _changeColor(color: string) {
+    this.$selection.style("stroke", color);
+    this.$arrowHead.style("fill", color);
   }
 
   _append(
     $svg: d3.Selection<SVGGElement, D3Relationship, SVGGElement, unknown>
   ) {
-    this._appendArrowHead($svg);
+    this.$arrowHead = this._appendArrowHead($svg);
     this.$selection = $svg
       .append("g")
       .attr("class", "links")
@@ -57,19 +69,21 @@ export default class D3Link extends Link implements D3Appendable, D3Tickable {
   _appendArrowHead(
     $svg: d3.Selection<SVGGElement, D3Relationship, SVGGElement, unknown>
   ) {
-    $svg
-      .append("svg:defs")
-      .append("svg:marker")
-      .attr("id", "arrow")
-      .attr("viewBox", "0 -5 10 10")
-      .attr("refX", D3_CONFIG.link.arrow.height) //so that it comes towards the center.
-      .attr("markerWidth", D3_CONFIG.link.arrow.width)
-      .attr("markerHeight", D3_CONFIG.link.arrow.height)
-      .attr("orient", "auto")
-      // change color
-      .style("fill", D3_CONFIG.link.strokeColor)
-      .append("svg:path")
-      .attr("d", "M0,-5L10,0L0,5");
+    return (
+      $svg
+        .append("svg:defs")
+        .append("svg:marker")
+        .attr("id", "arrow")
+        .attr("viewBox", "0 -5 10 10")
+        .attr("refX", D3_CONFIG.link.arrow.height) //so that it comes towards the center.
+        .attr("markerWidth", D3_CONFIG.link.arrow.width)
+        .attr("markerHeight", D3_CONFIG.link.arrow.height)
+        .attr("orient", "auto")
+        // change color
+        .style("fill", WebModel.linkColor.data)
+        .append("svg:path")
+        .attr("d", "M0,-5L10,0L0,5")
+    );
   }
 
   _updatePath() {
