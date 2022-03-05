@@ -10,7 +10,6 @@ import Relationship from "../graph/Relationship.js";
 import D3Node from "./D3Node.js";
 import Node from "../graph/Node.js";
 import D3DragHandler from "./D3DragHandler.js";
-import { zoom } from "d3";
 
 export default class D3Graph extends Graph implements D3Appendable {
   $doc: Document;
