@@ -1,5 +1,5 @@
 import { Event, LiveData } from "../utils/Observable";
-import SettingsModel from "../utils/WebModel";
+import SettingsModel from "../utils/SettingsModel";
 import D3Appendable from "./D3Appendable";
 import D3Node from "./D3Node";
 

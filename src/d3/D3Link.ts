@@ -10,7 +10,7 @@ import {
   VectorPair,
 } from "../utils/LinearAlgebra";
 import D3_CONFIG from "./D3_CONFIG";
-import SettingsModel from "../utils/WebModel";
+import SettingsModel from "../utils/SettingsModel";
 
 export default class D3Link extends Link implements D3Appendable, D3Tickable {
   static UPDATE_LINKS_EVENT: string = "updateLinks";

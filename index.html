@@ -9,49 +9,85 @@
   </head>
   <body>
     <!-- NavBar -->
-    <nav class="flex absolute h-12 top-0 right-0 left-0 bg-gray-800 items-stretch">
+    <nav class="flex absolute h-12 top-0 right-0 left-0 bg-blue-500 border-b-4 border-blue-600 items-stretch">
         <button class="inline-block text-2xl text-white align-middle pl-3">
-          FlowGraph
+          FlowGraph (alpha)
         </button>
+        <!-- Spacer until end -->
+        <div class="grow"></div>
     </nav>
     <!-- App Content -->
-    <div id="app" class="flex h-screen flex-1 pt-12">
-      <div class="flex flex-row grow">
+    <div id="app" class="flex h-screen bg-gray-200 flex-1 pt-12 ">
+      <div class="w-1/4 flex flex-row grow">
         <!-- Left side graph description input -->
-        <div id="input_container" class="flex flex-col flex-auto left-0 w-1/4 border-2 bg-gray-200">
-          <label for="input" class="text-center sticky flex-none top-0 tracking-wide text-gray-700 text-l font-bold">Graph description:</label>
-          <textarea id="input" name="input" class="flex-auto resize-none appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"></textarea> 
-          <button id="submit" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded flex-none mt-2">Show</button>
+        <div id="input_container" class=" flex flex-col flex-auto left-0 border-2 bg-gray-200">
+
+          <label for="input" class="text-center sticky flex-none top-0 tracking-wide text-gray-700 text-l font-bold">Graph description <i id="help_button" class="ph-question-light hover:cursor-help"></i></label>
+          <div class="flex-auto flex flex-col">
+            <textarea id="input" name="input" class=" flex-auto resize-none appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-blue-300"></textarea> 
+            <div id="error_box" class="hidden flex p-4 mt-1 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800">
+              <svg class="inline flex-shrink-0 mr-3 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+              <div class="break-all">
+                <div class="font-medium">Invalid input!</div> <div id="error_message">Error message</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-row pb-1">
+            <button id="submit_button" class="grow bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded mt-2">Show</button>
+            <button id="share_button" class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 ml-1 border-b-4 border-blue-700 hover:border-blue-500 rounded mt-2"><i class="ph-export-light"></i></button>
+          </div>
         </div>
       </div>
       <!-- Svg -->
-      <svg id="svg" class="w-3/4 right-0 border-2"></svg>
-
-      <div class="flex flex-col absolute right-0 m-2"> 
+      <svg id="svg" class="right-0 m-1 bg-white rounded-lg"></svg>
+      <div class="flex flex-col absolute right-0 m-3"> 
         <div class="flex flex-row">
           <div class="grow">
           </div>
-          <button id="settings_button" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-2 rounded inline-flex items-center" >
+          <button id="settings_button" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-2 rounded inline-flex items-center" >
             <i class="ph-gear-six-light"></i>
           </button>
         </div>
         <!-- Settings -->
-        <div id="settings_container" class="grid grid-cols-2 grid-rows-2 gap-x-3 gap-y-1 p-3 invisible max-w-sm rounded overflow-hidden shadow-lg rounded bg-white">
-
+        <div id="settings_container" class="mt-2 grid grid-cols-2 grid-rows-2 gap-x-3 gap-y-1 p-3 invisible max-w-sm rounded overflow-hidden shadow-lg rounded bg-white">
             <label for="node_color" class="text-gray-700 text-l">Node color:</label>
             <input class="place-self-center" id="node_color" type="color" value="#000000"/>
-
             <label for="link_color" class="text-gray-700 text-l">Link color:</label>
             <input class="place-self-center" id="link_color" type="color" value="#000000"/>            
-
+        </div>
+      </div>
+      <!-- Share -->
+      <div id="share_popup" class="invisible absolute grid grid-cols-1 grid-rows-2 gap-x-3 gap-y-1 p-3 max-w-sm rounded overflow-hidden shadow-lg rounded bg-white">
+        <div class="flex flex-col">
+          <label for="export_url_field" class="text-gray-700 text-l">Copy URL:</label>
+          <div class="flex flex-row">
+            <input readonly="readonly"  id="export_url_field" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-1 px-4 text-gray-600 leading-tight focus:outline-none" type="text">
+            <button id="export_url_copy_button" class="button bg-gray-200 pl-2 pr-2 ml-1 rounded hover:bg-gray-300 click:border-2">
+              <i class="ph-copy-simple-light"></i>
+            </button>
+          </div>
         </div>
 
-      </div>
+        <div class="flex flex-col">
+          <label for="export_iframe_field" class="text-gray-700 text-l">Copy iFrame:</label>
+          <div class="flex flex-row">
+            <input readonly="readonly" id="export_iframe_field" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-1 px-4 text-gray-600 leading-tight focus:outline-none" type="text">
+            <button id="export_iframe_copy_button" class="button bg-gray-200 pl-2 pr-2 ml-1 rounded hover:bg-gray-300">
+              <i class="ph-copy-simple-light"></i>
+            </button>
+          </div>
+        </div>
 
-
+        </div>
     </div>
+
     <script type="module" src="/src/main.ts"></script>
   </body>
+
+
+
+
 
 </html>
 

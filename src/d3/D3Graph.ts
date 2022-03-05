@@ -29,7 +29,7 @@ export default class D3Graph extends Graph implements D3Appendable {
   constructor(graph: Graph, doc: Document) {
     super(graph.relationships);
     this.$doc = doc;
-    this.$svg = d3.select(doc.body).select<SVGElement>("svg");
+    this.$svg = d3.select(doc.body).select<SVGElement>("#svg");
     // get width of element with id "svg"
 
     D3Graph.width = this.$svg.node()?.getBoundingClientRect().width ?? 0;
@@ -39,6 +39,7 @@ export default class D3Graph extends Graph implements D3Appendable {
 
     this.$selection = this._append(this.$svg);
 
+    console.log(this.$selection);
     this.d3Relationships = this.relationships.map(
       (relationship: Relationship) => {
         return new D3Relationship(relationship, this.$selection);

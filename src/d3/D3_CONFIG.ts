@@ -33,6 +33,7 @@ const D3_CONFIG = {
 [[World]]---->"Hello2"
 "Hello2"--(+2)-->[[World2]]
 "Hello2"---->"Hello"`,
+    githubRepo: "AlexW00/Flow_Graph",
   },
 };
 
