@@ -10,7 +10,7 @@ import {
   VectorPair,
 } from "../utils/LinearAlgebra";
 import D3_CONFIG from "./D3_CONFIG";
-import WebModel from "../web/WebModel";
+import SettingsModel from "../utils/WebModel";
 
 export default class D3Link extends Link implements D3Appendable, D3Tickable {
   static UPDATE_LINKS_EVENT: string = "updateLinks";
@@ -34,7 +34,7 @@ export default class D3Link extends Link implements D3Appendable, D3Tickable {
     this._append($svg);
     D3EventBus.addEventListener(D3Simulation.TICK_EVENT, this.onTicked);
     D3EventBus.addEventListener(D3Link.UPDATE_LINKS_EVENT, this._onUpdateLinks);
-    WebModel.linkColor.addEventListener(
+    SettingsModel.linkColor.addEventListener(
       LiveData.EVENT_DATA_CHANGED,
       (e: Event) => this._changeColor(e.data)
     );
@@ -80,7 +80,7 @@ export default class D3Link extends Link implements D3Appendable, D3Tickable {
         .attr("markerHeight", D3_CONFIG.link.arrow.height)
         .attr("orient", "auto")
         // change color
-        .style("fill", WebModel.linkColor.data)
+        .style("fill", SettingsModel.linkColor.value)
         .append("svg:path")
         .attr("d", "M0,-5L10,0L0,5")
     );

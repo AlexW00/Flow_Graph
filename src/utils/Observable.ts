@@ -58,18 +58,18 @@ export class Observable {
 
 export class LiveData extends Observable {
   static EVENT_DATA_CHANGED: string = "dataChanged";
-  private _data: any;
+  private _value: any;
   constructor(data: any) {
     super();
-    this._data = data;
+    this._value = data;
   }
 
-  get data() {
-    return this._data;
+  get value() {
+    return this._value;
   }
 
-  set data(data: any) {
-    this._data = data;
+  set value(data: any) {
+    this._value = data;
     this.notifyAll(new Event(LiveData.EVENT_DATA_CHANGED, data));
   }
 }
