@@ -75,7 +75,7 @@ export default class D3Particle
   ) {
     return $selection
       .append("text")
-      .text((d: any) => {
+      .text(() => {
         return getLinkStrengthOperatorByType(linkStrengthType);
       })
       .attr("dy", ".35em")

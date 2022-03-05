@@ -1,7 +1,7 @@
 import Graph from "../graph/Graph.js";
 import * as d3 from "d3";
 import D3_CONFIG from "./D3_CONFIG.js";
-import { Observable, Event, D3EventBus } from "../utils/Observable.js";
+import { Event, D3EventBus } from "../utils/Observable.js";
 
 import D3Simulation from "./D3Simulation.js";
 import D3Appendable from "./D3Appendable.js";

@@ -14,7 +14,7 @@ const compilerOptions: TinyCompOptions = {
 const url = new URL(window.location.href);
 const urlSettings = url.searchParams.get("settings");
 if (urlSettings) SettingsModel.init(urlSettings);
-const isIframe = url.searchParams.get("iframe") === "true";
+//const isIframe = url.searchParams.get("iframe") === "true";
 
 let inputString = url.searchParams.get("input") ?? D3_CONFIG.website.startInput;
 const compiler = new TinyComp(attributeGrammar, compilerOptions);

@@ -7,11 +7,13 @@ class D3Simulation {
   static TICK_EVENT = "d3_tick";
   static isActive = false;
 
+  // ignore ts lint
+
   static updateChargeForceStrength() {
     D3Simulation.simulation
       ?.force("charge")
+      // @ts-ignore
       ?.strength(D3Simulation.chargeForceStrength);
-    //if (!D3Simulation.isActive) D3Simulation.simulation.alpha(1).restart();
   }
 
   static chargeForceStrength(d3Node: D3Node): number {

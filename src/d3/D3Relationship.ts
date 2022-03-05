@@ -1,5 +1,4 @@
 import { Selection } from "d3";
-import { NodeConnection } from "../graph/Graph";
 
 import Relationship from "../graph/Relationship";
 import D3Appendable from "./D3Appendable";
@@ -39,9 +38,8 @@ export default class D3Relationship
 
   _emitParticle() {
     const particle = new D3Particle(this);
-    particle.addEventListener(
-      D3Particle.PARTICLE_DESTROYED_EVENT,
-      (p: D3Particle) => this._onParticleDestroyed()
+    particle.addEventListener(D3Particle.PARTICLE_DESTROYED_EVENT, () =>
+      this._onParticleDestroyed()
     );
     this.d3Particles.push(particle);
   }
