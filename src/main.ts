@@ -68,16 +68,56 @@ function toggleErrorBox(doShow: boolean, message: string | null) {
   errorBox.classList.toggle("hidden", !doShow);
 }
 
+function toggleBlueButton(
+  doActivate: boolean,
+  button: HTMLButtonElement | HTMLInputElement
+) {
+  const disabledButtonClasses = [
+      "bg-gray-500",
+      "hover:bg-gray-400",
+      "border-gray-700",
+      "hover:border-gray-500",
+    ],
+    enabledButtonClasses = [
+      "bg-blue-500",
+      "hover:bg-blue-400",
+      "border-blue-700",
+      "hover:border-blue-500",
+    ];
+  button.disabled = !doActivate;
+  if (!doActivate) {
+    button.classList.remove(...enabledButtonClasses);
+    button.classList.add(...disabledButtonClasses);
+  } else {
+    button.classList.remove(...disabledButtonClasses);
+    button.classList.add(...enabledButtonClasses);
+  }
+}
+
 const input = document.querySelector<HTMLInputElement>("#input")!;
 input.value = inputString;
 
-const renderButton = document.querySelector("#submit_button")!;
+input.addEventListener("input", (e) => {
+  inputString = (e.target as HTMLInputElement).value;
+  try {
+    graph = compiler.compile(inputString) as Graph;
+    toggleErrorBox(false, null);
+    toggleBlueButton(true, renderButton);
+    toggleBlueButton(true, shareButton);
+  } catch (e: any) {
+    toggleErrorBox(true, e.message);
+    toggleBlueButton(false, renderButton);
+    toggleBlueButton(false, shareButton);
+  }
+});
+
+const renderButton =
+  document.querySelector<HTMLInputElement>("#submit_button")!;
 renderButton.addEventListener("click", () => {
   const newInput = (input as HTMLInputElement).value;
   try {
     graph = compiler.compile(newInput) as Graph;
-  } catch (e) {
-    console.error(e);
+  } catch (e: any) {
     toggleErrorBox(true, e.message);
     return;
   }
