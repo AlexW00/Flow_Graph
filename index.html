@@ -8,60 +8,6 @@
 		<title>Vite App</title>
 	</head>
 	<body>
-		<!-- Share -->
-
-		<button
-			id="share_button"
-			class="hidden bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 ml-1 border-b-4 border-blue-700 hover:border-blue-500 rounded mt-2"
-		>
-			<i class="ph-export-light"></i>
-		</button>
-
-		<div
-			id="share-popup-template"
-			class="invisible absolute grid grid-cols-1 grid-rows-2 gap-x-3 gap-y-1 p-3 max-w-sm rounded overflow-hidden shadow-lg rounded bg-white"
-		>
-			<div class="flex flex-col">
-				<label for="export_url_field" class="text-gray-700 text-l"
-					>Copy URL:</label
-				>
-				<div class="flex flex-row">
-					<input
-						readonly="readonly"
-						id="export_url_field"
-						class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-1 px-4 text-gray-600 leading-tight focus:outline-none"
-						type="text"
-					/>
-					<button
-						id="export_url_copy_button"
-						class="button bg-gray-200 pl-2 pr-2 ml-1 rounded hover:bg-gray-300 click:border-2"
-					>
-						<i class="ph-copy-simple-light"></i>
-					</button>
-				</div>
-			</div>
-
-			<div class="flex flex-col">
-				<label for="export_iframe_field" class="text-gray-700 text-l"
-					>Copy iFrame:</label
-				>
-				<div class="flex flex-row">
-					<input
-						readonly="readonly"
-						id="export_iframe_field"
-						class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-1 px-4 text-gray-600 leading-tight focus:outline-none"
-						type="text"
-					/>
-					<button
-						id="export_iframe_copy_button"
-						class="button bg-gray-200 pl-2 pr-2 ml-1 rounded hover:bg-gray-300"
-					>
-						<i class="ph-copy-simple-light"></i>
-					</button>
-				</div>
-			</div>
-		</div>
-
 		<!-- NavBar -->
 		<nav
 			id="navbar-template"
@@ -132,17 +78,68 @@
 			</div>
 		</div>
 
+		<!-- ShareButton -->
+		<button
+			id="share-button-template"
+			class="hidden bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 ml-1 border-b-4 border-blue-700 hover:border-blue-500 rounded mt-2"
+		>
+			<i class="ph-export-light"></i>
+		</button>
+
+		<!-- SharePopup -->
+		<div
+			id="share-popup-template"
+			class="invisible absolute grid grid-cols-1 grid-rows-2 gap-x-3 gap-y-1 p-3 max-w-sm rounded overflow-hidden shadow-lg rounded bg-white"
+		>
+			<div class="flex flex-col">
+				<label for="export_url_field" class="text-gray-700 text-l"
+					>Copy URL:</label
+				>
+				<div class="flex flex-row">
+					<input
+						readonly="readonly"
+						id="export_url_field"
+						class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-1 px-4 text-gray-600 leading-tight focus:outline-none"
+						type="text"
+					/>
+					<button
+						id="export_url_copy_button"
+						class="button bg-gray-200 pl-2 pr-2 ml-1 rounded hover:bg-gray-300 click:border-2"
+					>
+						<i class="ph-copy-simple-light"></i>
+					</button>
+				</div>
+			</div>
+
+			<div class="flex flex-col">
+				<label for="export_iframe_field" class="text-gray-700 text-l"
+					>Copy iFrame:</label
+				>
+				<div class="flex flex-row">
+					<input
+						readonly="readonly"
+						id="export_iframe_field"
+						class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-1 px-4 text-gray-600 leading-tight focus:outline-none"
+						type="text"
+					/>
+					<button
+						id="export_iframe_copy_button"
+						class="button bg-gray-200 pl-2 pr-2 ml-1 rounded hover:bg-gray-300"
+					>
+						<i class="ph-copy-simple-light"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+
 		<!-- Svg -->
 		<svg
 			id="svg-template"
-			class="hidden w-full h-full bg-white rounded-lg"
+			class="hidden w-full h-full bg-white rounded-lg cursor-move"
 		></svg>
 
-		<!-- Playground -->
-		<div
-			id="playground-template"
-			class="hidden w-3/4 right-0 m-1 bg-white rounded-lg"
-		></div>
+		<!-- Preview -->
+		<div id="preview-template" class="hidden bg-white rounded-lg"></div>
 
 		<!-- Settings -->
 		<div

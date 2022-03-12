@@ -36,8 +36,6 @@ export default class D3Graph extends Graph implements D3Appendable {
 		this.d3DragHandler = D3DragHandler.create(d3, this.d3Simulation);
 
 		this.$selection = this._append(this.$svg);
-
-		console.log(this.$selection);
 		this.d3Relationships = this.relationships.map(
 			(relationship: Relationship) => {
 				return new D3Relationship(relationship, this.$selection);
@@ -81,7 +79,6 @@ export default class D3Graph extends Graph implements D3Appendable {
 	}
 
 	zoomed = (d: any) => {
-		console.log("zoomed", d);
 		this.$svg.attr("transform", () => d.transform);
 	};
 }

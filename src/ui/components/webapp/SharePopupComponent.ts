@@ -12,87 +12,83 @@ export default class SharePopupComponent extends Component {
 		this.$shareButton = $shareButton;
 	}
 
-	protected _render(): HTMLElement | SVGElement {
+	protected _render(): HTMLElement {
 		this.$root = Component.cloneTemplate("share-popup-template");
-		console.log("root");
-		console.log(this.$root);
 		this.$sharePopupUrlInput =
 			document.querySelector<HTMLInputElement>("#export_url_field")!;
 		this.$sharePopupIframeInput = document.querySelector<HTMLInputElement>(
 			"#export_iframe_field"
 		)!;
 
-		this.sharePopupCopyUrlButtonController(
+		this._sharePopupCopyUrlButtonController(
 			document.querySelector<HTMLButtonElement>("#export_url_copy_button")!
 		);
-		this.sharePopupCopyIframeController(
+		this._sharePopupCopyIframeController(
 			document.querySelector<HTMLButtonElement>("#export_iframe_copy_button")!
 		);
 
-		return this.$root;
+		return this.$root as HTMLElement;
 	}
 
 	toggle = () => {
-		console.log(this);
-		this.positionSharePopup();
+		this._positionSharePopup();
 		const isInvisibile = this.$root!.classList.toggle("invisible");
 		if (!isInvisibile) {
-			this.setExportTexts();
+			this._setExportTexts();
 		}
 	};
 
-	setExportTexts() {
-		this.setExportUrl();
-		this.setExportIframe();
+	private _setExportTexts() {
+		this._setExportUrl();
+		this._setExportIframe();
 	}
 
-	setExportUrl() {
-		const url = `${window.location.href}?input=${encodeURIComponent(
+	private _getWindowUrl(): string {
+		return window.location.origin + window.location.pathname;
+	}
+
+	private _setExportUrl() {
+		const url = `${this._getWindowUrl()}?input=${encodeURIComponent(
 			InputModel.inputString.value
 		)}&settings=${encodeURIComponent(SettingsModel.exportString())}`;
-		console.log(url);
 		this.$sharePopupUrlInput!.value = url;
 	}
 
-	setExportIframe() {
-		console.log(SettingsModel.exportString());
-		const url = `${window.location.href}?input=${encodeURIComponent(
+	private _setExportIframe() {
+		const url = `${this._getWindowUrl()}?input=${encodeURIComponent(
 			InputModel.inputString.value
 		)}&settings=${encodeURIComponent(
 			SettingsModel.exportString()
 		)}&iframe=true`;
-		this.$sharePopupIframeInput!.value = `<iframe src="${url}" width="100%" height="100%" frameborder="0"></iframe>`;
+		this.$sharePopupIframeInput!.value = `<iframe src="${url}" width="500px" height="500px" frameborder="0"></iframe>`;
 	}
 
-	positionSharePopup() {
+	private _positionSharePopup() {
 		const { left, top } = this.$shareButton!.getBoundingClientRect(),
 			shareButtonWidth = this.$shareButton!.offsetWidth,
-			popupHeight = this.$root!.offsetHeight,
-			popupWidth = this.$root!.offsetWidth;
+			popupHeight = (this.$root as HTMLElement).offsetHeight,
+			popupWidth = (this.$root as HTMLElement).offsetWidth;
 
-		console.log(left, top, shareButtonWidth, popupHeight, popupWidth);
 		this.$root!.style.left = `${
 			left - popupWidth / 2 + shareButtonWidth / 2
 		}px`;
 		this.$root!.style.top = `${top - popupHeight - 10}px`;
 	}
 
-	sharePopupCopyIframeController(
+	private _sharePopupCopyIframeController(
 		sharePopupCopyIframeButton: HTMLButtonElement
 	) {
 		sharePopupCopyIframeButton.addEventListener("click", () => {
-			console.log("copy");
 			const url = this.$sharePopupIframeInput!.value;
 			navigator.clipboard.writeText(url);
 			this.closeSharePopup();
 		});
 	}
 
-	sharePopupCopyUrlButtonController(
+	private _sharePopupCopyUrlButtonController(
 		sharePopupCopyUrlButton: HTMLButtonElement
 	) {
 		sharePopupCopyUrlButton.addEventListener("click", () => {
-			console.log("copy");
 			const url = this.$sharePopupUrlInput!.value;
 			navigator.clipboard.writeText(url);
 			this.closeSharePopup();

@@ -2,18 +2,19 @@ import D3_CONFIG from "../../../d3/D3_CONFIG";
 import Graph from "../../../graph/Graph";
 import CompilerModel from "../../../utils/CompilerModel";
 import InputModel from "../../../utils/InputModel";
-import SettingsModel from "../../../utils/SettingsModel";
 import Component from "../Component";
 import ShareButtonComponent from "./ShareButtonComponent";
-import SharePopupComponent from "./SharePopupComponent";
+
+// ====================================================== //
+// ================ InputSidebarComponent =============== //
+// ====================================================== //
 
 export default class InputSidebarComponent extends Component {
 	$renderButton: HTMLInputElement | undefined;
-
 	$errorBox: HTMLDivElement | undefined;
 	$errorMessage: HTMLDivElement | undefined;
+	$shareButton: HTMLButtonElement | undefined;
 	shareButtonComponent: ShareButtonComponent;
-	$shareButton: HTMLElement | undefined;
 
 	constructor() {
 		super();
@@ -30,55 +31,60 @@ export default class InputSidebarComponent extends Component {
 		this.$errorBox = this.$root.querySelector<HTMLDivElement>("#error_box")!;
 		this.$errorMessage =
 			this.$root.querySelector<HTMLDivElement>("#error_message")!;
-		this.helpButtonController(
+		this._helpButtonController(
 			this.$root.querySelector<HTMLButtonElement>("#help_button")!
 		);
-		this.inputController(this.$root.querySelector<HTMLInputElement>("#input")!);
+
 		this.$renderButton.addEventListener("click", () => {
-			console.log("click");
 			const newInput = InputModel.inputString.value;
 			CompilerModel.graph.value = CompilerModel.compiler.compile(newInput);
-			console.log(CompilerModel.graph);
 		});
 
-		this.$shareButton = this.shareButtonComponent.html();
+		this.$shareButton = this.shareButtonComponent.html() as HTMLButtonElement;
 		this.$root
 			.querySelector("#input-button-bar")
 			?.appendChild(this.$shareButton!);
-
+		this._inputController(
+			this.$root.querySelector<HTMLInputElement>("#input")!
+		);
 		return this.$root;
 	}
 
-	helpButtonController = (helpButton: HTMLButtonElement) => {
+	private _helpButtonController = (helpButton: HTMLButtonElement) => {
 		helpButton.addEventListener("click", () => {
 			window.open("https://github.com/" + D3_CONFIG.website.githubRepo);
 		});
 	};
 
-	inputController = (input: HTMLInputElement) => {
-		input.addEventListener("input", (e) => {
-			InputModel.inputString.value = (e.target as HTMLInputElement).value;
-			try {
-				CompilerModel.compiler.compile(InputModel.inputString.value) as Graph;
-				this.toggleErrorBox(false, null);
-				this.toggleBlueButton(true, this.$renderButton!);
-				this.toggleBlueButton(true, this.$shareButton!); // TODO: replace with function
-			} catch (e: any) {
-				this.toggleErrorBox(true, e.message);
-				this.toggleBlueButton(false, this.$renderButton!);
-				this.toggleBlueButton(false, this.$shareButton!);
-			}
-		});
+	private _inputController = (input: HTMLInputElement) => {
+		input.addEventListener("input", (e) =>
+			this._onInput((e.target as HTMLInputElement).value)
+		);
 
 		input.value = InputModel.inputString.value;
+		this._onInput(input.value);
 	};
 
-	toggleErrorBox(doShow: boolean, message: string | null) {
+	private _onInput(newInput: string): any {
+		InputModel.inputString.value = newInput;
+		try {
+			CompilerModel.compiler.compile(InputModel.inputString.value) as Graph;
+			this._toggleErrorBox(false, null);
+			this._toggleBlueButton(true, this.$renderButton!);
+			this._toggleBlueButton(true, this.$shareButton!);
+		} catch (e: any) {
+			this._toggleErrorBox(true, e.message);
+			this._toggleBlueButton(false, this.$renderButton!);
+			this._toggleBlueButton(false, this.$shareButton!);
+		}
+	}
+
+	private _toggleErrorBox(doShow: boolean, message: string | null) {
 		if (message) this.$errorMessage!.innerText = message;
 		this.$errorBox!.classList.toggle("hidden", !doShow);
 	}
 
-	toggleBlueButton(
+	private _toggleBlueButton(
 		doActivate: boolean,
 		button: HTMLButtonElement | HTMLInputElement
 	) {

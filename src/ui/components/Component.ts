@@ -4,7 +4,6 @@
 
 export default abstract class Component {
 	protected $root: HTMLElement | SVGElement | undefined;
-
 	protected abstract _render(): HTMLElement | SVGElement;
 
 	html(): HTMLElement | SVGElement {

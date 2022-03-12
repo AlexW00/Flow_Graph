@@ -24,6 +24,7 @@ export default class SettingsComponent extends Component {
 	}
 
 	private _nodeColorPickerController = (nodeColorPicker: HTMLInputElement) => {
+		nodeColorPicker.value = SettingsModel.nodeColor.value;
 		nodeColorPicker.addEventListener("change", (e) => {
 			const newColor = (e.target as HTMLInputElement).value;
 			SettingsModel.nodeColor.value = newColor;
@@ -31,6 +32,7 @@ export default class SettingsComponent extends Component {
 	};
 
 	private _linkColorPickerController = (linkColorPicker: HTMLInputElement) => {
+		linkColorPicker.value = SettingsModel.linkColor.value;
 		linkColorPicker.addEventListener("change", (e) => {
 			const newColor = (e.target as HTMLInputElement).value;
 			SettingsModel.linkColor.value = newColor;

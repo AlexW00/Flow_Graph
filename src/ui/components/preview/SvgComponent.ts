@@ -13,16 +13,14 @@ export default class SvgComponent extends Component {
 
 	constructor() {
 		super();
-		CompilerModel.graph.addEventListener(LiveData.EVENT_DATA_CHANGED, () => {
-			console.log("event");
-			this._renderGraph();
-		});
+		CompilerModel.graph.addEventListener(LiveData.EVENT_DATA_CHANGED, () =>
+			this._renderGraph()
+		);
 		this._tryCompileGraph();
 	}
 
 	protected _render(): SVGElement {
 		this.$root = Component.cloneTemplate("svg-template") as SVGElement;
-		this._renderGraph();
 		return this.$root;
 	}
 
