@@ -9,7 +9,7 @@ export default class ContentComponent extends Component {
 	constructor() {
 		super();
 		this.inputSidebarComponent = new InputSidebarComponent();
-		this.previewComponent = new PreviewComponent();
+		this.previewComponent = new PreviewComponent(false);
 	}
 
 	protected _render(): HTMLElement | SVGElement {

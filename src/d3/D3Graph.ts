@@ -12,7 +12,6 @@ import Node from "../graph/Node.js";
 import D3DragHandler from "./D3DragHandler.js";
 
 export default class D3Graph extends Graph implements D3Appendable {
-	$doc: Document;
 	$svg: d3.Selection<SVGElement, unknown, null, undefined>;
 
 	static width: number;
