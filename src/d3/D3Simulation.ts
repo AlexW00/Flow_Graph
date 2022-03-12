@@ -17,7 +17,7 @@ class D3Simulation {
 	}
 
 	static chargeForceStrength(d3Node: D3Node): number {
-		return -Math.pow(d3Node.weightToRadius(), 2.0) * 0.2;
+		return -Math.pow(d3Node.weightToRadius(), 2.0) * 0.4;
 	}
 
 	static create(d3: any): d3.Simulation<d3.SimulationNodeDatum, undefined> {
