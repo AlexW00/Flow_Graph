@@ -52,7 +52,7 @@ export default class InputSidebarComponent extends Component {
 
 	private _helpButtonController = (helpButton: HTMLButtonElement) => {
 		helpButton.addEventListener("click", () => {
-			window.open("https://github.com/" + D3_CONFIG.website.githubRepo);
+			window.open(D3_CONFIG.website.helpLink);
 		});
 	};
 
