@@ -35,7 +35,7 @@ const D3_CONFIG = {
 "Growth"---->"Size"
 "Size"---->"Photosynthesis"
         `,
-		helpLink: "https://github.com/AlexW00/Flow_Graph",
+		helpLink: "https://github.com/AlexW00/Flow_Graph#-documentation",
 	},
 };
 
