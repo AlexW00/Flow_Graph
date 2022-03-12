@@ -13,9 +13,10 @@ export default class SvgComponent extends Component {
 
 	constructor() {
 		super();
-		CompilerModel.graph.addEventListener(LiveData.EVENT_DATA_CHANGED, () =>
-			this._renderGraph()
-		);
+		CompilerModel.graph.addEventListener(LiveData.EVENT_DATA_CHANGED, () => {
+			console.log("event");
+			this._renderGraph();
+		});
 		this._tryCompileGraph();
 	}
 
@@ -29,7 +30,7 @@ export default class SvgComponent extends Component {
 		try {
 			const input = InputModel.inputString.value,
 				graph = CompilerModel.compiler.compile(input);
-			CompilerModel.graph = graph;
+			CompilerModel.graph.value = graph;
 		} catch (e: any) {
 			console.log(e);
 		}
@@ -37,7 +38,7 @@ export default class SvgComponent extends Component {
 
 	private _renderGraph() {
 		if (this.d3Graph !== undefined) this.d3Graph.delete();
-		if (CompilerModel.graph.value !== null)
+		if (CompilerModel.graph.value !== undefined)
 			this.d3Graph = new D3Graph(
 				CompilerModel.graph.value,
 				this.$root as SVGElement

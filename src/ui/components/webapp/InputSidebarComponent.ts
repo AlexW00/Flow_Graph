@@ -4,15 +4,21 @@ import CompilerModel from "../../../utils/CompilerModel";
 import InputModel from "../../../utils/InputModel";
 import SettingsModel from "../../../utils/SettingsModel";
 import Component from "../Component";
+import ShareButtonComponent from "./ShareButtonComponent";
+import SharePopupComponent from "./SharePopupComponent";
 
 export default class InputSidebarComponent extends Component {
 	$renderButton: HTMLInputElement | undefined;
-	$shareButton: HTMLInputElement | undefined;
+
 	$errorBox: HTMLDivElement | undefined;
 	$errorMessage: HTMLDivElement | undefined;
-	$sharePopup: HTMLDivElement | undefined;
-	$sharePopupUrlInput: HTMLInputElement | undefined;
-	$sharePopupIframeInput: HTMLInputElement | undefined;
+	shareButtonComponent: ShareButtonComponent;
+	$shareButton: HTMLElement | undefined;
+
+	constructor() {
+		super();
+		this.shareButtonComponent = new ShareButtonComponent();
+	}
 
 	protected _render(): HTMLElement {
 		this.$root = Component.cloneTemplate(
@@ -21,100 +27,26 @@ export default class InputSidebarComponent extends Component {
 
 		this.$renderButton =
 			this.$root.querySelector<HTMLInputElement>("#submit_button")!;
-		this.$shareButton =
-			this.$root.querySelector<HTMLInputElement>("#share_button")!;
-		this.$sharePopup =
-			this.$root.querySelector<HTMLDivElement>("#share_popup")!;
-		this.$sharePopupUrlInput =
-			this.$root.querySelector<HTMLInputElement>("#export_url_field")!;
-		this.$sharePopupIframeInput = this.$root.querySelector<HTMLInputElement>(
-			"#export_iframe_field"
-		)!;
-
-		console.log(this.$root);
-
-		this.sharePopupCopyUrlButtonController(
-			this.$root.querySelector<HTMLButtonElement>("#export_url_copy_button")!
-		);
-		this.sharePopupCopyIframeController(
-			this.$root.querySelector<HTMLButtonElement>("#export_iframe_copy_button")!
-		);
-
 		this.$errorBox = this.$root.querySelector<HTMLDivElement>("#error_box")!;
 		this.$errorMessage =
 			this.$root.querySelector<HTMLDivElement>("#error_message")!;
 		this.helpButtonController(
 			this.$root.querySelector<HTMLButtonElement>("#help_button")!
 		);
+		this.inputController(this.$root.querySelector<HTMLInputElement>("#input")!);
+		this.$renderButton.addEventListener("click", () => {
+			console.log("click");
+			const newInput = InputModel.inputString.value;
+			CompilerModel.graph.value = CompilerModel.compiler.compile(newInput);
+			console.log(CompilerModel.graph);
+		});
+
+		this.$shareButton = this.shareButtonComponent.html();
+		this.$root
+			.querySelector("#input-button-bar")
+			?.appendChild(this.$shareButton!);
 
 		return this.$root;
-	}
-
-	shareButtonController(shareButton: HTMLInputElement) {
-		shareButton.addEventListener("click", () => {
-			this.positionSharePopup();
-			const isInvisibile = this.$sharePopup!.classList.toggle("invisible");
-			if (!isInvisibile) {
-				this.setExportTexts();
-			}
-		});
-	}
-
-	setExportTexts() {
-		this.setExportUrl();
-		this.setExportIframe();
-	}
-
-	setExportUrl() {
-		const url = `${window.location.href}?input=${encodeURIComponent(
-			InputModel.inputString.value
-		)}&settings=${encodeURIComponent(SettingsModel.exportString())}`;
-		console.log(url);
-		this.$sharePopupUrlInput!.value = url;
-	}
-
-	setExportIframe() {
-		console.log(SettingsModel.exportString());
-		const url = `${window.location.href}?input=${encodeURIComponent(
-			InputModel.inputString.value
-		)}&settings=${encodeURIComponent(
-			SettingsModel.exportString()
-		)}&iframe=true`;
-		this.$sharePopupIframeInput!.value = `<iframe src="${url}" width="100%" height="100%" frameborder="0"></iframe>`;
-	}
-
-	positionSharePopup() {
-		const { left, top } = this.$shareButton!.getBoundingClientRect(),
-			shareButtonWidth = this.$shareButton!.offsetWidth,
-			popupHeight = this.$shareButton!.offsetHeight,
-			popupWidth = this.$shareButton!.offsetWidth;
-
-		this.$shareButton!.style.left = `${
-			left - popupWidth / 2 + shareButtonWidth / 2
-		}px`;
-		this.$shareButton!.style.top = `${top - popupHeight - 10}px`;
-	}
-
-	sharePopupCopyIframeController(
-		sharePopupCopyIframeButton: HTMLButtonElement
-	) {
-		sharePopupCopyIframeButton.addEventListener("click", () => {
-			console.log("copy");
-			const url = this.$sharePopupIframeInput!.value;
-			navigator.clipboard.writeText(url);
-			this.closeSharePopup();
-		});
-	}
-
-	sharePopupCopyUrlButtonController(
-		sharePopupCopyUrlButton: HTMLButtonElement
-	) {
-		sharePopupCopyUrlButton.addEventListener("click", () => {
-			console.log("copy");
-			const url = this.$sharePopupUrlInput!.value;
-			navigator.clipboard.writeText(url);
-			this.closeSharePopup();
-		});
 	}
 
 	helpButtonController = (helpButton: HTMLButtonElement) => {
@@ -127,19 +59,18 @@ export default class InputSidebarComponent extends Component {
 		input.addEventListener("input", (e) => {
 			InputModel.inputString.value = (e.target as HTMLInputElement).value;
 			try {
-				const graph = CompilerModel.compiler.compile(
-					InputModel.inputString.value
-				) as Graph;
-				CompilerModel.graph.value = graph;
+				CompilerModel.compiler.compile(InputModel.inputString.value) as Graph;
 				this.toggleErrorBox(false, null);
 				this.toggleBlueButton(true, this.$renderButton!);
-				this.toggleBlueButton(true, this.$shareButton!);
+				this.toggleBlueButton(true, this.$shareButton!); // TODO: replace with function
 			} catch (e: any) {
 				this.toggleErrorBox(true, e.message);
 				this.toggleBlueButton(false, this.$renderButton!);
-				this.toggleBlueButton(false, this.$shareButton!!);
+				this.toggleBlueButton(false, this.$shareButton!);
 			}
 		});
+
+		input.value = InputModel.inputString.value;
 	};
 
 	toggleErrorBox(doShow: boolean, message: string | null) {
@@ -171,9 +102,5 @@ export default class InputSidebarComponent extends Component {
 			button.classList.remove(...disabledButtonClasses);
 			button.classList.add(...enabledButtonClasses);
 		}
-	}
-
-	closeSharePopup() {
-		this.$sharePopup!.classList.add("invisible");
 	}
 }
